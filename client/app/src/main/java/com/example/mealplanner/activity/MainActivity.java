@@ -1,8 +1,10 @@
-package com.example.mealplanner;
+package com.example.mealplanner.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.mealplanner.R;
 
 public class MainActivity extends AppCompatActivity {
 
