@@ -3,6 +3,7 @@ package com.example.mealplanner.fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ public class LoginFragment extends Fragment {
     Button loginBtn;
 
     public LoginFragment() {
-        // Required empty public constructor
     }
 
 
@@ -31,7 +31,23 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        usernameEt = view.findViewById(R.id.usernameEt);
+        passwordEt = view.findViewById(R.id.passwordEt);
+        loginBtn = view.findViewById(R.id.loginBtn);
+        loginBtn.setOnClickListener(loginBtnListener);
+        return view;
     }
+
+    View.OnClickListener loginBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FragmentManager fm = getParentFragmentManager();
+            fm.beginTransaction().replace(R.id.fragment_container,MainFragment.class,null).commit();
+        }
+    };
+
+
+
+
 }
