@@ -27,6 +27,9 @@ dependencies {
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
 	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.5.3'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.6.1'
+
 
 
 }
