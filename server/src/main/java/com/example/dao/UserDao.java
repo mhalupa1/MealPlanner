@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDao extends JpaRepository<User,Integer> {
 
-    @Query(value = "SELECT * from korisnik where korisnicko_ime=:username", nativeQuery = true)
+    @Query(value = "SELECT k from korisnik k where k.username=:username")
     public User getForUsername(String username);
+
+    @Query(value = "SELECT k from korisnik k where k.username=:username AND k.password=:password")
+    public User login(String username, String password);
 }

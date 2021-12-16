@@ -29,6 +29,11 @@ dependencies {
 	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.5.3'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.6.1'
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-core
+	implementation group: 'org.springframework.data', name: 'spring-data-rest-core', version: '3.6.0'
+	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-rest-webmvc
+	implementation group: 'org.springframework.data', name: 'spring-data-rest-webmvc', version: '3.6.0'
+
 
 
 

@@ -16,16 +16,22 @@ public class User {
     @Id
     @Column(name = "id_korisnik")
     @GeneratedValue
-
-    int id;
+    private Integer id;
     @Column(name = "korisnicko_ime")
-    String username;
+    private String username;
     @Column(name = "sifra")
-    String password;
+    private String password;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private Set<Pantry> pantry;
+
+
+    public User(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
 
     public User(String username, String password) {
         this.username = username;

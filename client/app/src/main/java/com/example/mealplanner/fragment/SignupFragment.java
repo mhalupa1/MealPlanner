@@ -98,6 +98,7 @@ public class SignupFragment extends Fragment {
                         FragmentManager fm = getParentFragmentManager();
                         fm.beginTransaction().replace(R.id.fragment_container, LoginFragment.class, null).commit();
                     } else {
+                        //TODO: ne radi bas kak spada
                         Toast.makeText(context, response.body() != null ? response.body().toString() : "Something went wrong",
                                 Toast.LENGTH_LONG).show();
                     }

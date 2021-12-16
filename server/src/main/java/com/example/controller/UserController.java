@@ -32,5 +32,18 @@ public class UserController {
                     .body("This username already exists");
         }
     }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity login(@RequestParam String username, @RequestParam String password){
+        //TODO: map entity id
+        User user = service.login(username,password);
+        if (user != null){
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Wrong username or password");
+        }
+    }
 }
 

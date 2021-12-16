@@ -23,4 +23,12 @@ public class UserService {
         User user = new User(username,password);
         return repo.save(user);
     }
+
+    public User login(String username, String password){
+        User dbUser = repo.login(username,password);
+        if(dbUser == null){
+            return null;
+        }
+        return new User(username,password);
+    }
 }
