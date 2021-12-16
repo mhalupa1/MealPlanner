@@ -20,6 +20,7 @@ public class Category {
 
     @Id
     @Column(name = "id_kategorija")
+    @GeneratedValue
     private int id;
     @Column(name = "ime")
     private String name;

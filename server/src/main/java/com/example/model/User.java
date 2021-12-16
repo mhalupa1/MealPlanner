@@ -15,6 +15,8 @@ public class User {
 
     @Id
     @Column(name = "id_korisnik")
+    @GeneratedValue
+
     int id;
     @Column(name = "korisnicko_ime")
     String username;
@@ -25,5 +27,12 @@ public class User {
     @JsonIgnore
     private Set<Pantry> pantry;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
+    public User() {
+
+    }
 }

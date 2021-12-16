@@ -14,4 +14,13 @@ public class UserService {
     public User getOne(int id){
         return repo.getById(id);
     }
+
+    public User signup(String username, String password){
+        User dbUser = repo.getForUsername(username);
+        if(dbUser != null){
+            return null;
+        }
+        User user = new User(username,password);
+        return repo.save(user);
+    }
 }

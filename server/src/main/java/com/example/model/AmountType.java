@@ -16,6 +16,7 @@ public class AmountType {
 
     @Id
     @Column(name = "id_kolicina")
+    @GeneratedValue
     private int id;
     @Column(name = "tip")
     private String type;

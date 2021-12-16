@@ -23,6 +23,7 @@ public class GenericIngredient {
 
     @Id
     @Column(name = "id_sastojak")
+    @GeneratedValue
     private int id;
     @Column(name = "ime")
     private String name;

@@ -17,6 +17,7 @@ public class Ingredient {
 
     @Id
     @Column(name = "id_namirnica")
+    @GeneratedValue
     private int id;
     @Column(name = "ime")
     private String name;
