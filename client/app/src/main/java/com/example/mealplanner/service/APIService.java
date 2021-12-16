@@ -10,4 +10,8 @@ public interface APIService {
     @POST("/signup")
     Call<ResponseBody> signup(@Query("username") String username,
                               @Query("password") String password);
+
+    @POST("/login")
+    Call<ResponseBody> login(@Query("username") String username,
+                              @Query("password") String password);
 }
