@@ -40,5 +40,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
     implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.9.0'
     implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.thoughtbot:expandablecheckrecyclerview:1.4'
+    implementation 'com.thoughtbot:expandablerecyclerview:1.4'
+
 
 }
