@@ -1,9 +1,9 @@
 package com.example.dao;
 
-import com.example.model.AmountType;
+import com.example.model.MeasuringUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AmountTypeDao extends JpaRepository<AmountType, Integer> {
+public interface MeasuringUnitDao extends JpaRepository<MeasuringUnit, Integer> {
 }

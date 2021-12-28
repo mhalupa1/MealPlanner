@@ -10,16 +10,16 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
 
-@Entity(name = "namirnica")
+@Entity(name = "proizvod")
 @Getter
 @Setter
 public class Ingredient {
 
     @Id
-    @Column(name = "id_namirnica")
+    @Column(name = "id_proizvod")
     @GeneratedValue
     private int id;
-    @Column(name = "ime")
+    @Column(name = "naziv")
     private String name;
     @Column(name = "kolicina")
     private BigDecimal amount;
@@ -32,7 +32,7 @@ public class Ingredient {
 
     @OneToMany(mappedBy = "ingredient")
     @JsonIgnore
-    private Set<Pantry> pantrySet;
+    private Set<PantryIngredient> pantryIngredientSet;
 
 
     public Ingredient(int id, String name, BigDecimal amount, String barcode, GenericIngredient genericIngredient) {
@@ -46,4 +46,54 @@ public class Ingredient {
     public Ingredient() {
 
     }
+
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getAmount() {
+        return this.amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getBarcode() {
+        return this.barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public GenericIngredient getGenericIngredient() {
+        return this.genericIngredient;
+    }
+
+    public void setGenericIngredient(GenericIngredient genericIngredient) {
+        this.genericIngredient = genericIngredient;
+    }
+
+    public Set<PantryIngredient> getPantryIngredientSet() {
+        return this.pantryIngredientSet;
+    }
+
+    public void setPantryIngredientSet(Set<PantryIngredient> pantryIngredientSet) {
+        this.pantryIngredientSet = pantryIngredientSet;
+    }
+
 }

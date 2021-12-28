@@ -6,32 +6,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
-@Entity(name = "kategorija")
 @Getter
 @Setter
-public class Category {
-
-    public Category(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+@Entity(name = "mjerna_jedinica")
+public class MeasuringUnit {
 
     @Id
-    @Column(name = "id_kategorija")
+    @Column(name = "id_mjerna_jedinica")
     @GeneratedValue
     private int id;
     @Column(name = "naziv")
     private String name;
+    @Column(name = "default_kolicina")
+    private BigDecimal defaultAmount;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "measuringUnit")
     @JsonIgnore
     private Set<GenericIngredient> ingredientSet;
-
-    public Category() {
-
-    }
 
 
     public int getId() {
@@ -50,6 +44,14 @@ public class Category {
         this.name = name;
     }
 
+    public BigDecimal getDefaultAmount() {
+        return this.defaultAmount;
+    }
+
+    public void setDefaultAmount(BigDecimal defaultAmount) {
+        this.defaultAmount = defaultAmount;
+    }
+
     public Set<GenericIngredient> getIngredientSet() {
         return this.ingredientSet;
     }
@@ -57,5 +59,6 @@ public class Category {
     public void setIngredientSet(Set<GenericIngredient> ingredientSet) {
         this.ingredientSet = ingredientSet;
     }
+
 
 }

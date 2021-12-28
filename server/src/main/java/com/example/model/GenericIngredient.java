@@ -14,25 +14,25 @@ import java.util.Set;
 @Setter
 public class GenericIngredient {
 
-    public GenericIngredient(int id, String name, Category category, AmountType amountType) {
+    public GenericIngredient(int id, String name, Category category, MeasuringUnit measuringUnit) {
         this.id = id;
         this.name = name;
         this.category = category;
-        this.amountType = amountType;
+        this.measuringUnit = measuringUnit;
     }
 
     @Id
     @Column(name = "id_sastojak")
     @GeneratedValue
     private int id;
-    @Column(name = "ime")
+    @Column(name = "naziv")
     private String name;
     @ManyToOne
     @JoinColumn(name = "id_kategorija")
     private Category category;
     @ManyToOne
-    @JoinColumn(name = "id_kolicina")
-    private AmountType amountType;
+    @JoinColumn(name = "id_mjerna_jedinica")
+    private MeasuringUnit measuringUnit;
 
     @OneToMany(mappedBy = "genericIngredient")
     @JsonIgnore
@@ -41,4 +41,46 @@ public class GenericIngredient {
     public GenericIngredient() {
 
     }
+
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public MeasuringUnit getMeasuringUnit() {
+        return this.measuringUnit;
+    }
+
+    public void setMeasuringUnit(MeasuringUnit measuringUnit) {
+        this.measuringUnit = measuringUnit;
+    }
+
+    public Set<Ingredient> getIngredientSet() {
+        return this.ingredientSet;
+    }
+
+    public void setIngredientSet(Set<Ingredient> ingredientSet) {
+        this.ingredientSet = ingredientSet;
+    }
+
 }

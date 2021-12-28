@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface IngredientDao extends JpaRepository<Ingredient,Integer> {
 
-    @Query("SELECT n FROM namirnica n LEFT JOIN FETCH n.genericIngredient")
+    @Query("SELECT n FROM proizvod n LEFT JOIN FETCH n.genericIngredient")
     public List<Ingredient> getAll();
 }

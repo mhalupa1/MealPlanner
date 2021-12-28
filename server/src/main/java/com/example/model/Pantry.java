@@ -1,49 +1,82 @@
 package com.example.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity(name = "smocnica")
 @Getter
 @Setter
 public class Pantry {
-
-    @Embeddable
-    class PantryKey implements Serializable {
-        @Column(name = "id_korisnik")
-        private int userId;
-
-        @Column(name = "id_namirnica")
-        private int ingredientId;
-    }
-
-    @EmbeddedId
-    private PantryKey id;
+    @Id
+    @Column(name = "id_smocnica")
+    @GeneratedValue
+    private int id;
+    @Column(name = "naziv")
+    private String name;
 
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "id_korisnik")
     private User user;
 
+    @OneToMany(mappedBy = "pantry")
+    @JsonIgnore
+    private Set<PantryIngredient> pantryIngredientSet;
 
-    @ManyToOne
-    @MapsId("ingredientId")
-    @JoinColumn(name = "id_namirnica")
-    private Ingredient ingredient;
+    public Pantry(int id, String name, User user) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+    }
 
-    @Column(name = "rok_trajanja")
-    private LocalDate expirationDate;
-
-    @Column(name = "kolicina")
-    private BigDecimal amount;
 
     public Pantry() {
-
     }
+
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<PantryIngredient> getPantryIngredientSet() {
+        return this.pantryIngredientSet;
+    }
+
+    public void setPantryIngredientSet(Set<PantryIngredient> pantryIngredientSet) {
+        this.pantryIngredientSet = pantryIngredientSet;
+    }
+
+
+    
 }
