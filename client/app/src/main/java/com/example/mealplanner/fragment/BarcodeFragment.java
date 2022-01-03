@@ -43,14 +43,16 @@ public class BarcodeFragment extends Fragment {
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
-                intentIntegrator.setPrompt("For flash use volume up key");
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.setCaptureActivity(Capture.class);
-                intentIntegrator.initiateScan();
+
             }
         });
+
+        IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
+        intentIntegrator.setPrompt("For flash use volume up key");
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
         return view;
     }
 

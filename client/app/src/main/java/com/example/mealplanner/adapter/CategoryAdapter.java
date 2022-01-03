@@ -23,6 +23,7 @@ public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewH
 
     LayoutInflater inflater;
 
+
     public CategoryAdapter(List<? extends ExpandableGroup> groups, LayoutInflater inflater) {
         super(groups);
         this.inflater = inflater;
@@ -45,6 +46,7 @@ public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewH
         final GenericIngredientListWrapper genericIngredient = ((CategoryListWrapper) group).getItems().get(childIndex);
         holder.setName(genericIngredient.getGenericIngredient().getName());
         holder.setGenericIngredient(genericIngredient);
+        holder.setTexts();
 
         if(genericIngredient.isSelected()){
             holder.getCheckBox().setChecked(true);

@@ -7,13 +7,13 @@ public class GenericIngredient implements Parcelable {
 
     private int id;
     private String name;
-    private AmountType amountType;
+    private MeasuringUnit measuringUnit;
     private Category category;
 
-    public GenericIngredient(int id, String name, AmountType amountType, Category category) {
+    public GenericIngredient(int id, String name, MeasuringUnit measuringUnit, Category category) {
         this.id = id;
         this.name = name;
-        this.amountType = amountType;
+        this.measuringUnit = measuringUnit;
         this.category = category;
     }
 
@@ -51,12 +51,12 @@ public class GenericIngredient implements Parcelable {
         this.name = name;
     }
 
-    public AmountType getAmountType() {
-        return amountType;
+    public MeasuringUnit getMeasuringUnit() {
+        return measuringUnit;
     }
 
-    public void setAmountType(AmountType amountType) {
-        this.amountType = amountType;
+    public void setAmountType(MeasuringUnit measuringUnit) {
+        this.measuringUnit = measuringUnit;
     }
 
     public Category getCategory() {
