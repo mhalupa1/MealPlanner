@@ -91,7 +91,12 @@ public class SignupFragment extends Fragment {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
                         Gson gson = new Gson();
-                        User user = gson.fromJson(gson.toJson(response.body()), User.class);
+                        User user = null;
+                        try {
+                            user = gson.fromJson(response.body().string(), User.class);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         UserData.setUser(user);
                         Toast.makeText(context, "Signup success!",
                                 Toast.LENGTH_LONG).show();

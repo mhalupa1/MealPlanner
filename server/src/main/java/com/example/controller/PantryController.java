@@ -6,10 +6,13 @@ import com.example.model.Pantry;
 import com.example.service.PantryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,12 +21,17 @@ public class PantryController {
     private PantryService service;
     
     @GetMapping(value = "/getUserPantries")
-    public List<Pantry> getUserPantries(@RequestParam int userId){
-        return service.getUserPantries(userId);
+    public List<Pantry> getUserPantries(@RequestParam int id){
+        return service.getUserPantries(id);
     }
 
     @PostMapping(value = "/savePantry")
     public Pantry save(@RequestBody Pantry pantry){
         return service.save(pantry);
+    }
+    @DeleteMapping(value = "/deletePantry")
+    public ResponseEntity delete(@RequestParam int id){
+        service.delete(id);
+        return ResponseEntity.ok("Item deleted");
     }
 }

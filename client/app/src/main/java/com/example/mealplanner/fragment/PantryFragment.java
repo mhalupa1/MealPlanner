@@ -1,66 +1,215 @@
 package com.example.mealplanner.fragment;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.example.mealplanner.R;
+import com.example.mealplanner.adapter.PantryAdapter;
+import com.example.mealplanner.global.UserData;
+import com.example.mealplanner.model.Pantry;
+import com.example.mealplanner.model.User;
+import com.example.mealplanner.service.APIClient;
+import com.example.mealplanner.service.APIService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PantryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+
 public class PantryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    APIService service;
+    RecyclerView recyclerView;
+    ArrayList<Pantry> pantryArrayList = new ArrayList<Pantry>();
+    FloatingActionButton addPantryBtn;
+    SharedPreferences pref;
+    User user;
+    PantryAdapter pantryAdapter;
 
     public PantryFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PantryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PantryFragment newInstance(String param1, String param2) {
-        PantryFragment fragment = new PantryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pantry, container, false);
+        APIClient APIClient = new APIClient();
+        Retrofit retrofit = APIClient.getClient();
+        service = retrofit.create(APIService.class);
+        pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        user = gson.fromJson(pref.getString("user",null), User.class);
+
+        View view = inflater.inflate(R.layout.fragment_pantry, container, false);
+        addPantryBtn = view.findViewById(R.id.addPantryBtn);
+        recyclerView = view.findViewById(R.id.recyclerViewPantryList);
+        recyclerView.setHasFixedSize(true);
+        pantryAdapter = new PantryAdapter(pantryArrayList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(pantryAdapter);
+        pantryAdapter.setOnItemClickListener(new PantryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Pantry pantry = pantryArrayList.get(position);
+                PantryIngredientsFragment fragment = new PantryIngredientsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("pantry", pantry);
+                fragment.setArguments(bundle);
+                FragmentManager fm = getParentFragmentManager();
+                fm.beginTransaction().replace(R.id.fragment_container,fragment,null).commit();
+            }
+        });
+        pantryAdapter.setOnLongItemClickListener(new PantryAdapter.OnLongItemClickListener() {
+            @Override
+            public void onLongItemClick(View view, int position) {
+                PopupMenu popupMenu = new PopupMenu(getContext(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if(menuItem.getItemId() == R.id.deletePantry){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Delete Confirmation");
+                            builder.setMessage("Are you sure you want to delete this pantry?");
+                            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Call<ResponseBody> deletePantryCall = service.deletePantry(pantryArrayList.get(position).getId());
+                                    deletePantryCall.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if(response.isSuccessful()){
+                                                pantryArrayList.remove(position);
+                                                pantryAdapter.notifyItemRemoved(position);
+                                            }else{
+                                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                                        }
+                                    });
+
+                                }
+                            });
+                            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+
+        addPantryBtn.setOnClickListener(addPantryBtnListener);
+
+        Call<List<Pantry>> getUserPantriesCall = service.getUserPantries(user.getId());
+        getUserPantriesCall.enqueue(new Callback<List<Pantry>>() {
+            @Override
+            public void onResponse(Call<List<Pantry>> call, Response<List<Pantry>> response) {
+                if(response.isSuccessful() && response.body()!=null){
+                    pantryArrayList.addAll(response.body());
+                    pantryAdapter.notifyDataSetChanged();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Pantry>> call, Throwable t) {
+
+            }
+        });
+
+
+        return view;
     }
+
+    View.OnClickListener addPantryBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            final View customLayout = getLayoutInflater().inflate(R.layout.pantry_dialog,null);
+            builder.setView(customLayout);
+            builder.setTitle("Add pantry");
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    EditText addPantry = customLayout.findViewById(R.id.addPantryEditTxt);
+                    String name = addPantry.getText().toString().trim();
+                    Pantry pantry = new Pantry(name,user);
+                    Call<Pantry> savePantryCall = service.savePantry(pantry);
+                    savePantryCall.enqueue(new Callback<Pantry>() {
+                        @Override
+                        public void onResponse(Call<Pantry> call, Response<Pantry> response) {
+                            if(response.isSuccessful() && response.body() != null){
+                                Pantry pantry = response.body();
+                                pantryArrayList.add(pantry);
+                                pantryAdapter.notifyItemInserted(pantryArrayList.indexOf(pantry));
+                            }else{
+                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Pantry> call, Throwable t) {
+
+                        }
+                    });
+
+
+                }
+            });
+            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+    };
 }

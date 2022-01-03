@@ -22,6 +22,8 @@ import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -88,10 +90,17 @@ public class LoginFragment extends Fragment {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if(response.isSuccessful() && response.body()!= null){
                         Gson gson = new Gson();
-                        User user = gson.fromJson(gson.toJson(response.body()), User.class);
+                        User user = null;
+                        try {
+                            user = gson.fromJson(response.body().string(), User.class);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        UserData.setUser(user);
                         Toast.makeText(context, "Login success!",
                                 Toast.LENGTH_LONG).show();
                         SharedPreferences pref = context.getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
+                        pref.edit().putString("user",gson.toJson(user)).apply();
                         pref.edit().putLong("loginTime",System.currentTimeMillis()).apply();
                         FragmentManager fm = getParentFragmentManager();
                         fm.beginTransaction().replace(R.id.fragment_container,MainFragment.class,null).commit();

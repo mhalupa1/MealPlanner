@@ -11,12 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mealplanner.R;
+import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
+import com.example.mealplanner.model.Pantry;
+import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -83,7 +87,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,null).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
 
 
         return view;

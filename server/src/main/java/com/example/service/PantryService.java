@@ -20,4 +20,8 @@ public class PantryService {
     public Pantry save(Pantry pantry){
         return repo.save(pantry);
     }
+
+    public void delete(int id){
+        repo.deleteById(id);
+    }
 }

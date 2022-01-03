@@ -2,6 +2,7 @@ package com.example.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.hibernate.type.TrueFalseType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +33,7 @@ public class Pantry {
     @JoinColumn(name = "id_korisnik")
     private User user;
 
-    @OneToMany(mappedBy = "pantry")
+    @OneToMany(mappedBy = "pantry", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<PantryIngredient> pantryIngredientSet;
 
