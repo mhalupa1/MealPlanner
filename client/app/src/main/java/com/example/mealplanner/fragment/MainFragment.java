@@ -2,8 +2,10 @@ package com.example.mealplanner.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,16 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mealplanner.R;
-import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
-import com.example.mealplanner.model.Pantry;
-import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -58,16 +58,20 @@ public class MainFragment extends Fragment {
 
         Call<List<Category>> categoryCall = service.getCategories();
         categoryCall.enqueue(new Callback<List<Category>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if(response.isSuccessful()){
-                    pref.edit().putString("categories", gson.toJson(response.body())).apply();
+                    List<Category> categories = response.body();
+                    categories.sort(Comparator.comparing(Category::getName));
+                    String cat = gson.toJson(categories);
+                    pref.edit().putString("categories", gson.toJson(categories)).apply();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
 
@@ -77,17 +81,18 @@ public class MainFragment extends Fragment {
             @Override
             public void onResponse(Call<List<GenericIngredient>> call, Response<List<GenericIngredient>> response) {
                 if(response.isSuccessful()){
-                    pref.edit().putString("genericIngredients", gson.toJson(response.body())).apply();
+                    List<GenericIngredient> ingredients = response.body();
+                    pref.edit().putString("genericIngredients", gson.toJson(ingredients)).apply();
+                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,null).commit();
                 }
             }
 
             @Override
             public void onFailure(Call<List<GenericIngredient>> call, Throwable t) {
-
+                t.printStackTrace();
             }
         });
 
-        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
 
 
         return view;

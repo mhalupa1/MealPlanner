@@ -1,16 +1,16 @@
 package com.example.mealplanner.model;
 
-public class AmountType {
+public class MeasuringUnit {
 
 
     private int id;
-    private String type;
+    private String name;
     private Double defaultAmount;
 
 
-    public AmountType(int id, String type, Double defaultAmount) {
+    public MeasuringUnit(int id, String name, Double defaultAmount) {
         this.id = id;
-        this.type = type;
+        this.name = name;
         this.defaultAmount = defaultAmount;
     }
 
@@ -23,12 +23,12 @@ public class AmountType {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getDefaultAmount() {

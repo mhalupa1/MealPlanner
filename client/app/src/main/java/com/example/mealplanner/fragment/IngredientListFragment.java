@@ -21,6 +21,7 @@ import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
 import com.example.mealplanner.wrapper.CategoryListWrapper;
 import com.example.mealplanner.wrapper.GenericIngredientListWrapper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
@@ -35,6 +36,7 @@ public class IngredientListFragment extends Fragment {
 
     SharedPreferences pref;
     RecyclerView recyclerView;
+    FloatingActionButton scanBtn;
 
 
     public IngredientListFragment() {
@@ -56,8 +58,9 @@ public class IngredientListFragment extends Fragment {
         pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
         Gson gson = new Gson();
 
-        List<Category> categories = Arrays.asList(gson.fromJson(pref.getString("categories",null),Category[].class));
-        List<GenericIngredient> genericIngredients = Arrays.asList(gson.fromJson(pref.getString("genericIngredients",null), GenericIngredient[].class));
+        String cat = pref.getString("categories",null);
+        List<Category> categories = Arrays.asList(gson.fromJson(pref.getString("categories",""),Category[].class));
+        List<GenericIngredient> genericIngredients = Arrays.asList(gson.fromJson(pref.getString("genericIngredients",""), GenericIngredient[].class));
 
 
         List<CategoryListWrapper> categoryWrappers = new LinkedList<>();
@@ -67,9 +70,15 @@ public class IngredientListFragment extends Fragment {
         }
 
         for(Category category : categories){
-            List<GenericIngredientListWrapper> catIngList = genericIngredientWrappers.stream().
+            List<GenericIngredientListWrapper> catIngList = new LinkedList<>();
+            /*List<GenericIngredientListWrapper> catIngList = genericIngredientWrappers.stream().
                     filter(ing -> ing.getGenericIngredient().getCategory().getId() == category.getId())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList());*/
+            for(GenericIngredientListWrapper wrapper : genericIngredientWrappers){
+                if(wrapper.getGenericIngredient().getCategory().getId() == category.getId()){
+                    catIngList.add(wrapper);
+                }
+            }
             catIngList.sort(Comparator.comparing(o -> o.getGenericIngredient().getName()));
             CategoryListWrapper wrapper = new CategoryListWrapper(new Category(category.getId(), category.getName()),catIngList);
             categoryWrappers.add(wrapper);
@@ -79,12 +88,24 @@ public class IngredientListFragment extends Fragment {
         CategoryAdapter adapter = new CategoryAdapter(categoryWrappers,inflater);
         View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
 
+        scanBtn = view.findViewById(R.id.scanBarcodeBtn);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
         recyclerView = view.findViewById(R.id.recyclerViewIngList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(1,0);
+
+        scanBtn.setOnClickListener(scanBtnListener);
         return view;
     }
+
+    View.OnClickListener scanBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,BarcodeFragment.class,null).commit();
+        }
+    };
 }

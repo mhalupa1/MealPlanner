@@ -5,21 +5,61 @@
 
     <CheckBox
         android:id="@+id/ingredientListCb"
-        android:paddingStart="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp">
 
     </CheckBox>
 
 
     <TextView
         android:id="@+id/ingredientListItem"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
         android:padding="5dp"
+        android:paddingStart="5dp"
         android:textSize="20sp">
 
     </TextView>
 
+
+    <EditText
+        android:id="@+id/ingDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Exp. date"
+        android:visibility="gone"
+        android:paddingTop="2dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <EditText
+            android:layout_marginStart="15dp"
+            android:id="@+id/amountEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/amountTypeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+        </TextView>
+
+    </LinearLayout>
+
+
+
 </LinearLayout>
+

@@ -11,24 +11,24 @@ public class UserService {
     @Autowired
     UserDao repo;
 
-    public User getOne(int id){
+    public User getOne(int id) {
         return repo.getById(id);
     }
 
-    public User signup(String username, String password){
+    public User signup(String username, String password) {
         User dbUser = repo.getForUsername(username);
-        if(dbUser != null){
+        if (dbUser != null) {
             return null;
         }
-        User user = new User(username,password);
+        User user = new User(username, password);
         return repo.save(user);
     }
 
-    public User login(String username, String password){
-        User dbUser = repo.login(username,password);
-        if(dbUser == null){
+    public User login(String username, String password) {
+        User dbUser = repo.login(username, password);
+        if (dbUser == null) {
             return null;
         }
-        return new User(dbUser.getId(),username,password);
+        return new User(username, password);
     }
 }

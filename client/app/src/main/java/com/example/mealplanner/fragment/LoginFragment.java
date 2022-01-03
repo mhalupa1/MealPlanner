@@ -114,7 +114,7 @@ public class LoginFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                    t.printStackTrace();
                 }
             });
 
