@@ -3,6 +3,7 @@ package com.example.mealplanner.service;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
 import com.example.mealplanner.model.Pantry;
+import com.example.mealplanner.model.PantryIngredient;
 
 import java.util.List;
 
@@ -38,5 +39,8 @@ public interface APIService {
 
     @DELETE("/deletePantry")
     Call<ResponseBody> deletePantry(@Query("id") int id);
+
+    @GET("/getPantryIngredients")
+    Call<List<PantryIngredient>> getPantryIngredients(@Query("id") int id);
 
 }

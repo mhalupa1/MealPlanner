@@ -43,13 +43,13 @@ import retrofit2.Retrofit;
 
 public class PantryFragment extends Fragment {
 
-    APIService service;
-    RecyclerView recyclerView;
-    ArrayList<Pantry> pantryArrayList = new ArrayList<Pantry>();
-    FloatingActionButton addPantryBtn;
-    SharedPreferences pref;
-    User user;
-    PantryAdapter pantryAdapter;
+    private APIService service;
+    private RecyclerView recyclerView;
+    private ArrayList<Pantry> pantryArrayList = new ArrayList<Pantry>();
+    private FloatingActionButton addPantryBtn;
+    private SharedPreferences pref;
+    private User user;
+    private PantryAdapter pantryAdapter;
 
     public PantryFragment() {
     }

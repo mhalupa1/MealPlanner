@@ -15,8 +15,8 @@ public class PantryIngredientController {
     private PantryIngredientService service;
 
     @GetMapping(value = "/getPantryIngredients")
-    public List<PantryIngredient> getPantryIngredients(@RequestParam int pantryId){
-        return service.getPantryIngredients(pantryId);
+    public List<PantryIngredient> getPantryIngredients(@RequestParam int id){
+        return service.getPantryIngredients(id);
     }
 
 }

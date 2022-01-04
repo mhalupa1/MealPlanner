@@ -83,7 +83,7 @@ public class MainFragment extends Fragment {
                 if(response.isSuccessful()){
                     List<GenericIngredient> ingredients = response.body();
                     pref.edit().putString("genericIngredients", gson.toJson(ingredients)).apply();
-                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,null).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
                 }
             }
 

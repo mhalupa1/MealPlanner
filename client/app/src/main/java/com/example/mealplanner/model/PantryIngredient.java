@@ -1,17 +1,18 @@
 package com.example.mealplanner.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PantryIngredient {
 
     private int id;
     private LocalDate expirationDate;
-    private Integer amount;
+    private BigDecimal amount;
     private Pantry pantry;
     private Ingredient ingredient;
 
 
-    public PantryIngredient(int id, LocalDate expirationDate, Integer amount, Pantry pantry, Ingredient ingredient) {
+    public PantryIngredient(int id, LocalDate expirationDate, BigDecimal amount, Pantry pantry, Ingredient ingredient) {
         this.id = id;
         this.expirationDate = expirationDate;
         this.amount = amount;
@@ -35,11 +36,11 @@ public class PantryIngredient {
         this.expirationDate = expirationDate;
     }
 
-    public Integer getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
