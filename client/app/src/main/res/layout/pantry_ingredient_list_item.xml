@@ -51,7 +51,7 @@
         android:layout_marginLeft="6dp"
         android:inputType="numberDecimal"
         android:hint="Amount"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/pantryIngAmountTypeTv"

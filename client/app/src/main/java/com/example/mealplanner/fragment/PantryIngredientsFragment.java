@@ -65,12 +65,19 @@ public class PantryIngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        PantryIngredient p1 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(50),new Pantry(1,"pantry",new User(1,"ass", "class")),
+        PantryIngredient p1 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(100),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
                 new Ingredient(2, "Milka Noisette",new BigDecimal(300),"22222222",new GenericIngredient(2, "chocolate",new MeasuringUnit(1,"g",100.0), new Category(2,"Vegetables"))));
-        PantryIngredient p2 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(50),new Pantry(1,"pantry",new User(1,"ass", "class")),
+        PantryIngredient p2 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(300),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
                 new Ingredient(2, "Milka Oreo",new BigDecimal(300),"22222222",new GenericIngredient(2, "chocolate",new MeasuringUnit(1,"g",100.0), new Category(2,"Vegetables"))));
+        PantryIngredient p3 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(1),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
+                new Ingredient(2, null,new BigDecimal(300),"22222222",new GenericIngredient(2, "milk",new MeasuringUnit(1,"L",1.0), new Category(2,"Vegetables"))));
+        PantryIngredient p4 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(2),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
+                new Ingredient(2, "Dukat mlijeko 2.8%",new BigDecimal(300),"22222222",new GenericIngredient(2, "milk",new MeasuringUnit(1,"L",1.0), new Category(2,"Vegetables"))));
+
         pantryArrayList.add(p1);
         pantryArrayList.add(p2);
+        pantryArrayList.add(p3);
+        pantryArrayList.add(p4);
         mapIngredients();
 
 

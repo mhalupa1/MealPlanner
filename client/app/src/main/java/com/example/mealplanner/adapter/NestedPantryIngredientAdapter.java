@@ -45,6 +45,7 @@ public class NestedPantryIngredientAdapter extends RecyclerView.Adapter<NestedPa
         holder.getDatePicker().setText(p.getExpirationDate().toString());
         holder.getAmntEt().setText(p.getAmount().toString());
         holder.getInitAmount();
+        holder.getAmountTypeTv().setText(p.getIngredient().getGenericIngredient().getMeasuringUnit().getName());
 
     }
 

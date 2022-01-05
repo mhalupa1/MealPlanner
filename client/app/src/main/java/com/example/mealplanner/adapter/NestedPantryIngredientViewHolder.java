@@ -24,6 +24,7 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
     private ImageView decreaseAmnt;
     private EditText amntEt;
     private ImageView increaseAmnt;
+    private TextView amountTypeTv;
     final Calendar calendar = Calendar.getInstance();
     private float currAmnt;
     private float initAmnt;
@@ -34,6 +35,7 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         decreaseAmnt = itemView.findViewById(R.id.decreaseAmountIv);
         amntEt = itemView.findViewById(R.id.pantryIngAmountEt);
         increaseAmnt = itemView.findViewById(R.id.increaseAmountIv);
+        amountTypeTv = itemView.findViewById(R.id.pantryIngAmountTypeTv);
         decreaseAmnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +101,15 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         initAmnt = Float.valueOf(amntEt.getText().toString().trim());
         currAmnt = initAmnt;
     }
+
+    public TextView getAmountTypeTv() {
+        return amountTypeTv;
+    }
+
+    public void setAmountTypeTv(TextView amountTypeTv) {
+        this.amountTypeTv = amountTypeTv;
+    }
+
     public TextView getPantryIngTv() {
         return pantryIngTv;
     }
