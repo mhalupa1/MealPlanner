@@ -6,13 +6,15 @@ import java.time.LocalDate;
 public class PantryIngredient {
 
     private int id;
-    private LocalDate expirationDate;
-    private BigDecimal amount;
     private Pantry pantry;
     private Ingredient ingredient;
+    private LocalDate expirationDate;
+    private BigDecimal amount;
 
 
-    public PantryIngredient(int id, LocalDate expirationDate, BigDecimal amount, Pantry pantry, Ingredient ingredient) {
+
+
+    public PantryIngredient(int id, Pantry pantry, Ingredient ingredient, LocalDate expirationDate, BigDecimal amount) {
         this.id = id;
         this.expirationDate = expirationDate;
         this.amount = amount;
@@ -58,5 +60,16 @@ public class PantryIngredient {
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
+    }
+
+    @Override
+    public String toString() {
+        return "PantryIngredient{" +
+                "id=" + id +
+                ", expirationDate=" + expirationDate +
+                ", amount=" + amount +
+                ", pantry=" + pantry +
+                ", ingredient=" + ingredient +
+                '}';
     }
 }

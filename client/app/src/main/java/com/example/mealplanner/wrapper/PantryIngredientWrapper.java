@@ -38,4 +38,13 @@ public class PantryIngredientWrapper {
     public void setExpandable(boolean expandable) {
         isExpandable = expandable;
     }
+
+    @Override
+    public String toString() {
+        return "PantryIngredientWrapper{" +
+                "nestedList=" + nestedList +
+                ", itemText='" + itemText + '\'' +
+                ", isExpandable=" + isExpandable +
+                '}';
+    }
 }

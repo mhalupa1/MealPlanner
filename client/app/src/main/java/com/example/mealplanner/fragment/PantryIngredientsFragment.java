@@ -43,11 +43,13 @@ import retrofit2.Retrofit;
 
 
 public class PantryIngredientsFragment extends Fragment {
+
     private Pantry pantry;
     private APIService service;
     private ArrayList<PantryIngredient> pantryArrayList = new ArrayList<PantryIngredient>();
     private RecyclerView recyclerView;
     private ArrayList<PantryIngredientWrapper> wrapperArrayList = new ArrayList<>();
+    PantryIngredientAdapter adapter;
 
     public PantryIngredientsFragment() {
     }
@@ -65,41 +67,6 @@ public class PantryIngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        PantryIngredient p1 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(100),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
-                new Ingredient(2, "Milka Noisette",new BigDecimal(300),"22222222",new GenericIngredient(2, "chocolate",new MeasuringUnit(1,"g",100.0), new Category(2,"Vegetables"))));
-        PantryIngredient p2 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(300),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
-                new Ingredient(2, "Milka Oreo",new BigDecimal(300),"22222222",new GenericIngredient(2, "chocolate",new MeasuringUnit(1,"g",100.0), new Category(2,"Vegetables"))));
-        PantryIngredient p3 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(1),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
-                new Ingredient(2, null,new BigDecimal(300),"22222222",new GenericIngredient(2, "milk",new MeasuringUnit(1,"L",1.0), new Category(2,"Vegetables"))));
-        PantryIngredient p4 = new PantryIngredient(1,LocalDate.parse("2020-01-08"),new BigDecimal(2),new Pantry(1,"pantry",new User(1,"aaaa", "aaaa")),
-                new Ingredient(2, "Dukat mlijeko 2.8%",new BigDecimal(300),"22222222",new GenericIngredient(2, "milk",new MeasuringUnit(1,"L",1.0), new Category(2,"Vegetables"))));
-
-        pantryArrayList.add(p1);
-        pantryArrayList.add(p2);
-        pantryArrayList.add(p3);
-        pantryArrayList.add(p4);
-        mapIngredients();
-
-
-        APIClient APIClient = new APIClient();
-        Retrofit retrofit = APIClient.getClient();
-        service = retrofit.create(APIService.class);
-        Call<List<PantryIngredient>> pantryIngCall = service.getPantryIngredients(pantry.getId());
-        pantryIngCall.enqueue(new Callback<List<PantryIngredient>>() {
-            @Override
-            public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    pantryArrayList.addAll(response.body());
-                    //mapIngredients();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<PantryIngredient>> call, Throwable t) {
-
-            }
-        });
-
         View view = inflater.inflate(R.layout.fragment_pantry_ingredients, container, false);
         FloatingActionButton addPantryIngredientBtn = view.findViewById(R.id.addPantryIngredientBtn);
         addPantryIngredientBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,8 +79,35 @@ public class PantryIngredientsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.main_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        PantryIngredientAdapter adapter = new PantryIngredientAdapter(wrapperArrayList);
+        adapter = new PantryIngredientAdapter(wrapperArrayList);
         recyclerView.setAdapter(adapter);
+
+
+        APIClient APIClient = new APIClient();
+        Retrofit retrofit = APIClient.getClient();
+        service = retrofit.create(APIService.class);
+        Call<List<PantryIngredient>> pantryIngCall = service.getPantryIngredients(pantry.getId());
+        pantryIngCall.enqueue(new Callback<List<PantryIngredient>>() {
+            @Override
+            public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    pantryArrayList.addAll(response.body());
+                    mapIngredients();
+                    for(PantryIngredientWrapper i : wrapperArrayList){
+                        System.out.println(i);
+                    }
+                    adapter.notifyDataSetChanged();
+                }else{
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PantryIngredient>> call, Throwable t) {
+                System.out.println(t.getMessage());
+            }
+        });
+
+
         return view;
     }
 
@@ -133,6 +127,5 @@ public class PantryIngredientsFragment extends Fragment {
         for (Map.Entry<String, ArrayList<PantryIngredient>> entry : ingredientMap.entrySet()) {
             wrapperArrayList.add(new PantryIngredientWrapper(entry.getValue(), entry.getKey()));
         }
-
     }
 }

@@ -47,6 +47,9 @@ dependencies {
     runtimeOnly group: 'com.google.android.material', name: 'material', version: '1.6.0-alpha01'
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
 
 
 

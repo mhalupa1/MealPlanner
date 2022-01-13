@@ -145,7 +145,6 @@ public class PantryFragment extends Fragment {
         addPantryBtn.setOnClickListener(addPantryBtnListener);
 
         Call<List<Pantry>> getUserPantriesCall = service.getUserPantries(user.getId());
-        System.out.println("ID:"+user.getId());
         getUserPantriesCall.enqueue(new Callback<List<Pantry>>() {
             @Override
             public void onResponse(Call<List<Pantry>> call, Response<List<Pantry>> response) {
