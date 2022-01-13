@@ -21,7 +21,12 @@ public class PantryService {
         return repo.save(pantry);
     }
 
-    public void delete(int id){
-        repo.deleteById(id);
+    public boolean delete(int id){
+        if(repo.existsById(id)){
+            repo.deleteById(id);
+            return true;
+        }else{
+            return false;
+        }  
     }
 }

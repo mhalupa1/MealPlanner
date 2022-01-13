@@ -17,7 +17,7 @@ public class Ingredient {
 
     @Id
     @Column(name = "id_proizvod")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "naziv")
     private String name;

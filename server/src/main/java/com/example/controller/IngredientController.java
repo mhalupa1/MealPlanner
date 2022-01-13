@@ -4,6 +4,8 @@ import com.example.model.Ingredient;
 import com.example.service.IngredientService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,4 +30,17 @@ public class IngredientController {
     public Ingredient save(@RequestBody Ingredient ingredient){
         return service.save(ingredient);
     }
+
+    @GetMapping(value = "/getIngredientByBarcode")
+    public ResponseEntity getByBarcode(@RequestParam String barcode){
+        Ingredient ingredient = service.getByBarcode(barcode);
+        if (ingredient != null){
+            return ResponseEntity.ok(ingredient);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Barcode not found");
+        }
+    }
+
 }

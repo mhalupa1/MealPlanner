@@ -13,27 +13,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class PantryIngredient {
-
-    @Embeddable
-    class PantryIngredientKey implements Serializable {
-        @Column(name = "id_smocnica")
-        private int pantryId;
-
-        @Column(name = "id_proizvod")
-        private int ingredientId;
-    }
-
-    @EmbeddedId
-    private PantryIngredientKey id;
+    @Id
+    @GeneratedValue
+    @Column(name = "id_namirnica_smocnice")
+    private int id;
 
     @ManyToOne
-    @MapsId("pantryId")
     @JoinColumn(name = "id_smocnica")
     private Pantry pantry;
 
 
     @ManyToOne
-    @MapsId("ingredientId")
     @JoinColumn(name = "id_proizvod")
     private Ingredient ingredient;
 
@@ -43,18 +33,29 @@ public class PantryIngredient {
     @Column(name = "kolicina")
     private BigDecimal amount;
 
+
+    public PantryIngredient(int id, Pantry pantry, Ingredient ingredient, LocalDate expirationDate, BigDecimal amount) {
+        this.id = id;
+        this.pantry = pantry;
+        this.ingredient = ingredient;
+        this.expirationDate = expirationDate;
+        this.amount = amount;
+    }
+
+
     public PantryIngredient() {
 
     }
 
 
-    public PantryIngredientKey getId() {
+    public int getId() {
         return this.id;
     }
 
-    public void setId(PantryIngredientKey id) {
+    public void setId(int id) {
         this.id = id;
     }
+    
 
     public Pantry getPantry() {
         return this.pantry;

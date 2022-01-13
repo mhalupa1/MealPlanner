@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
@@ -7,70 +8,98 @@
     app:cardCornerRadius="2dp"
     app:cardElevation="4dp">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <TextView
-        android:id="@+id/pantryIngTv"
-        android:layout_width="140dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:paddingStart="10dp"
-        android:textSize="20sp">
+        android:padding="5dp">
 
-    </TextView>
+        <TextView
+            android:id="@+id/pantryIngTv"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:paddingStart="5dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/pantryIngDatePicker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/pantryIngDatePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Exp. date"
-        android:paddingTop="2dp"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="center"/>
+        </TextView>
 
-    <ImageView
-        android:id="@+id/decreaseAmountIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_remove_circle"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:clickable="true"></ImageView>
+        <EditText
+            android:id="@+id/pantryIngDatePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Exp. date"
+            android:paddingTop="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/decreaseAmountIv"
+            app:layout_constraintStart_toEndOf="@+id/pantryIngTv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
 
-    <EditText
-        android:id="@+id/pantryIngAmountEt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="2dp"
-        android:layout_marginLeft="6dp"
-        android:inputType="numberDecimal"
-        android:hint="Amount"
-        android:layout_gravity="center" />
+        <ImageView
+            android:id="@+id/decreaseAmountIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:src="@drawable/ic_remove_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/pantryIngAmountEt"
+            app:layout_constraintStart_toEndOf="@+id/pantryIngDatePicker"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.478"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"></ImageView>
 
-    <TextView
-        android:id="@+id/pantryIngAmountTypeTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:text="g"
-        android:layout_gravity="center">
+        <EditText
+            android:id="@+id/pantryIngAmountEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="8"
+            android:layout_gravity="center"
+            android:inputType="numberDecimal"
+            android:paddingTop="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/pantryIngAmountTypeTv"
+            app:layout_constraintStart_toEndOf="@+id/decreaseAmountIv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
 
-    </TextView>
-    <ImageView
-        android:id="@+id/increaseAmountIv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_circle"
-        android:layout_gravity="center"
-        android:layout_marginLeft="6dp"
-        android:clickable="true"></ImageView>
-</LinearLayout>
+        <TextView
+            android:id="@+id/pantryIngAmountTypeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="g"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/increaseAmountIv"
+            app:layout_constraintStart_toEndOf="@+id/pantryIngAmountEt"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/increaseAmountIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:src="@drawable/ic_add_circle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pantryIngAmountTypeTv"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"></ImageView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

@@ -101,6 +101,7 @@ public class LoginFragment extends Fragment {
                                 Toast.LENGTH_LONG).show();
                         SharedPreferences pref = context.getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
                         pref.edit().putString("user",gson.toJson(user)).apply();
+                        System.out.println(gson.toJson(user));
                         pref.edit().putLong("loginTime",System.currentTimeMillis()).apply();
                         FragmentManager fm = getParentFragmentManager();
                         fm.beginTransaction().replace(R.id.fragment_container,MainFragment.class,null).commit();

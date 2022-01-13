@@ -24,4 +24,8 @@ public class IngredientService {
     public Ingredient save(Ingredient ingredient){
         return repo.save(ingredient);
     }
+
+    public Ingredient getByBarcode(String barcode){
+        return repo.getByBarcode(barcode);
+    }
 }

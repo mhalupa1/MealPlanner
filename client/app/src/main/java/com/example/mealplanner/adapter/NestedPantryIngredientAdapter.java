@@ -23,7 +23,9 @@ public class NestedPantryIngredientAdapter extends RecyclerView.Adapter<NestedPa
     public interface OnItemsChangedListener{
         void onDateChanged(int position);
         void onAmountChanged(int position);
+        void onLongItemClick(View view, int position);
     }
+
 
     public void setOnItemsChangedListener(OnItemsChangedListener onItemsChangedListener){
         this.onItemsChangedListener = onItemsChangedListener;

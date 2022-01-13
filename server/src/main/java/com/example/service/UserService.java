@@ -29,6 +29,6 @@ public class UserService {
         if (dbUser == null) {
             return null;
         }
-        return new User(username, password);
+        return dbUser;
     }
 }
