@@ -22,6 +22,10 @@ public class PantryIngredientService {
         return repo.save(pantryIngredient);
     }
 
+    public List<PantryIngredient> saveAll(List<PantryIngredient> ingredients){
+        return repo.saveAll(ingredients);
+    }
+
     public PantryIngredient update(int id, PantryIngredient pantryIngredient){
         PantryIngredient pantryIng = repo.getById(id);
         if (pantryIng != null){

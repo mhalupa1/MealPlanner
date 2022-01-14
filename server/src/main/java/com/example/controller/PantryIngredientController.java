@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.model.Pantry;
 import com.example.model.PantryIngredient;
 import com.example.service.PantryIngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class PantryIngredientController {
     public PantryIngredient savePantryIngredient(@RequestBody PantryIngredient pantryIngredient){
         return service.save(pantryIngredient);
     }
+
+    @PostMapping("/saveAllPantryIngredients")
+    public List<PantryIngredient> saveAll(@RequestBody List<PantryIngredient> ingredients){
+        return service.saveAll(ingredients);
+    }
+
     @PutMapping(value = "/updatePantryIngredient")
     public ResponseEntity updatePantryIngredient(@RequestParam int id, 
     @RequestBody PantryIngredient pantryIngredient){

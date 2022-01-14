@@ -2,6 +2,9 @@ package com.example.mealplanner.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -9,28 +12,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.PantryIngredientAdapter;
-import com.example.mealplanner.model.Category;
-import com.example.mealplanner.model.GenericIngredient;
-import com.example.mealplanner.model.Ingredient;
-import com.example.mealplanner.model.MeasuringUnit;
 import com.example.mealplanner.model.Pantry;
 import com.example.mealplanner.model.PantryIngredient;
-import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
 import com.example.mealplanner.wrapper.PantryIngredientWrapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +64,9 @@ public class PantryIngredientsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getParentFragmentManager();
-                fm.beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,null).commit();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("pantry", pantry);
+                fm.beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,bundle).commit();
             }
         });
         recyclerView = view.findViewById(R.id.main_recyclerView);

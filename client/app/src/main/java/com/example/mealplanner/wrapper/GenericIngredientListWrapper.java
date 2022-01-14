@@ -5,13 +5,18 @@ import android.os.Parcelable;
 
 import com.example.mealplanner.model.GenericIngredient;
 
-public class GenericIngredientListWrapper implements Parcelable {
+public class GenericIngredientListWrapper implements Parcelable, Comparable<GenericIngredientListWrapper> {
 
     private GenericIngredient genericIngredient;
     private boolean selected;
 
     public GenericIngredientListWrapper(GenericIngredient genericIngredient) {
         this.genericIngredient = genericIngredient;
+    }
+
+    public GenericIngredientListWrapper(GenericIngredient genericIngredient, boolean selected) {
+        this.genericIngredient = genericIngredient;
+        this.selected = selected;
     }
 
     protected GenericIngredientListWrapper(Parcel in) {
@@ -54,5 +59,10 @@ public class GenericIngredientListWrapper implements Parcelable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    @Override
+    public int compareTo(GenericIngredientListWrapper o) {
+        return this.getGenericIngredient().getName().compareTo(o.getGenericIngredient().getName());
     }
 }

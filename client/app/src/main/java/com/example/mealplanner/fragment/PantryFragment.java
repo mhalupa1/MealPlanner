@@ -25,6 +25,7 @@ import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.PantryAdapter;
 import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Pantry;
+import com.example.mealplanner.model.PantryIngredient;
 import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;

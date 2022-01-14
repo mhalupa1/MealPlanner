@@ -33,6 +33,9 @@ public interface APIService {
     @GET("/getAllGenericIngredients")
     Call<List<GenericIngredient>> getGenericIngredients();
 
+    @POST("/getIngredientsByGenericId")
+    Call<List<Ingredient>> getIngredientsByGenericId(@Body List<Integer> ids);
+
     @GET("/getUserPantries")
     Call<List<Pantry>> getUserPantries(@Query("id") int id);
 
@@ -59,6 +62,9 @@ public interface APIService {
 
     @GET
     Call<ResponseBody> getIngredientByBarcode(@Query("barcode") String barcode);
+
+    @POST("/saveAllPantryIngredients")
+    Call<List<PantryIngredient>> saveAllPantryIngredients(@Body List<PantryIngredient> ingredients);
 
 
 

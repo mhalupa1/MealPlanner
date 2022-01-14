@@ -16,4 +16,7 @@ public interface IngredientDao extends JpaRepository<Ingredient,Integer> {
 
     @Query("SELECT n FROM proizvod n LEFT JOIN FETCH n.genericIngredient WHERE n.barcode=:barcode")
     public Ingredient getByBarcode(@Param("barcode") String barcode);
+
+    @Query("SELECT n from proizvod n LEFT JOIN FETCH n.genericIngredient where n.genericIngredient.id in (:ingredients) AND n.barcode IS NULL")
+    public List<Ingredient> getByGenericIds(List<Integer> ingredients);
 }

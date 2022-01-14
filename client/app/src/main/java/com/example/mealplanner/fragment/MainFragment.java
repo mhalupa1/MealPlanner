@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.Category;
@@ -49,6 +50,7 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);
@@ -64,7 +66,6 @@ public class MainFragment extends Fragment {
                 if(response.isSuccessful()){
                     List<Category> categories = response.body();
                     categories.sort(Comparator.comparing(Category::getName));
-                    String cat = gson.toJson(categories);
                     pref.edit().putString("categories", gson.toJson(categories)).apply();
                 }
             }
@@ -83,7 +84,6 @@ public class MainFragment extends Fragment {
                 if(response.isSuccessful()){
                     List<GenericIngredient> ingredients = response.body();
                     pref.edit().putString("genericIngredients", gson.toJson(ingredients)).apply();
-                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
                 }
             }
 
@@ -93,8 +93,20 @@ public class MainFragment extends Fragment {
             }
         });
 
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, PantryFragment.class, null).commit();
 
 
         return view;
     }
+
+
+    View.OnClickListener viewIngrsBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
+        }
+    };
+
+
+
 }

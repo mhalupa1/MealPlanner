@@ -9,7 +9,6 @@ import java.util.List;
 public class CategoryListWrapper extends ExpandableGroup<GenericIngredientListWrapper> {
 
     private Category category;
-
     public CategoryListWrapper(String title, List<GenericIngredientListWrapper> items) {
         super(title, items);
     }

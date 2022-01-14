@@ -1,6 +1,7 @@
 package com.example.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ public class PantryIngredient {
     @Id
     @GeneratedValue
     @Column(name = "id_namirnica_smocnice")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "id_smocnica")
@@ -34,7 +35,7 @@ public class PantryIngredient {
     private BigDecimal amount;
 
 
-    public PantryIngredient(int id, Pantry pantry, Ingredient ingredient, LocalDate expirationDate, BigDecimal amount) {
+    public PantryIngredient(Integer id, Pantry pantry, Ingredient ingredient, LocalDate expirationDate, BigDecimal amount) {
         this.id = id;
         this.pantry = pantry;
         this.ingredient = ingredient;
@@ -48,11 +49,11 @@ public class PantryIngredient {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     
