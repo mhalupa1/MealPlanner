@@ -1,18 +1,20 @@
 package com.example.mealplanner.fragment;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,17 +22,41 @@ import android.widget.Toast;
 
 import com.example.mealplanner.Capture;
 import com.example.mealplanner.R;
+import com.example.mealplanner.model.GenericIngredient;
+import com.example.mealplanner.model.Ingredient;
+import com.example.mealplanner.service.APIClient;
+import com.example.mealplanner.service.APIService;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-public class BarcodeFragment extends Fragment {
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+public class BarcodeFragment extends Fragment {
+    APIService service;
     Button scanBtn;
     TextView barcodeTxt;
+    Ingredient ingredient = null;
+    String txt = null;
+    SharedPreferences pref;
+    ArrayAdapter<String> adapter;
+    HashMap<String, GenericIngredient> map;
+    Context context;
     public BarcodeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +69,19 @@ public class BarcodeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_barcode, container, false);
+        context = getContext();
+        APIClient APIClient = new APIClient();
+        Retrofit retrofit = APIClient.getClient();
+        service = retrofit.create(APIService.class);
+        pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        List<GenericIngredient> genericIngredients = Arrays.asList(gson.fromJson(pref.getString("genericIngredients",""), GenericIngredient[].class));
+        map = new HashMap<>();
+        for(GenericIngredient i : genericIngredients){
+            map.put(i.getName(),i);
+        }
+        List<String> list = new ArrayList<>(map.keySet());
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, list);
         scanBtn = view.findViewById(R.id.scanBtn);
         barcodeTxt = view.findViewById(R.id.barcodeTxt);
         scanBtn.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +92,7 @@ public class BarcodeFragment extends Fragment {
                 intentIntegrator.setBeepEnabled(true);
                 intentIntegrator.setOrientationLocked(true);
                 intentIntegrator.setCaptureActivity(Capture.class);
+                intentIntegrator.setTimeout(20000);
                 intentIntegrator.initiateScan();
             }
         });
@@ -65,7 +105,142 @@ public class BarcodeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(intentResult.getContents() != null){
-            barcodeTxt.setText(intentResult.getContents());
+            String barcode = intentResult.getContents();
+            Call<ResponseBody> callBarcode = service.getIngredientByBarcode(barcode);
+            callBarcode.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful() && response.body() != null){
+                        Gson gson = new Gson();
+                        try {
+                            ingredient = gson.fromJson(response.body().string(), Ingredient.class);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if(ingredient != null){
+                            showProductFoundDialog();
+                        }else{
+                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        showProductNotFoundDialog(barcode);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                }
+            });
         }
+    }
+
+    private void showProductNotFoundDialog(String barcode){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.product_not_found_popup);
+        dialog.getWindow();
+        EditText productNameEt = dialog.findViewById(R.id.productNameEt);
+        EditText productQuantityEt = dialog.findViewById(R.id.productQuantityEt);
+        TextView quantityUnit = dialog.findViewById(R.id.quantityUnitTv);
+        productQuantityEt.setVisibility(View.INVISIBLE);
+        quantityUnit.setVisibility(View.INVISIBLE);
+        AutoCompleteTextView actv = dialog.findViewById(R.id.productAutoCompleteTv);
+        actv.setAdapter(adapter);
+
+        actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ingredient = new Ingredient();
+                ingredient.setGenericIngredient(map.get(adapter.getItem(i)));
+                quantityUnit.setText(ingredient.getGenericIngredient().getMeasuringUnit().getName());
+                productQuantityEt.setVisibility(View.VISIBLE);
+                quantityUnit.setVisibility(View.VISIBLE);
+            }
+        });
+        Button saveBtn = dialog.findViewById(R.id.saveProductBtn);
+        Button cancelBtn = dialog.findViewById(R.id.cancelProductBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                ingredient = null;
+            }
+        });
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = productNameEt.getText().toString().trim();
+                String quantity = productQuantityEt.getText().toString().trim();
+                if(name.isEmpty()){
+                    Toast.makeText(context,"Enter product name", Toast.LENGTH_SHORT).show();
+                    productNameEt.requestFocus();
+                }else if(ingredient == null || ingredient.getGenericIngredient() == null){
+                    Toast.makeText(context,"Choose product type", Toast.LENGTH_SHORT).show();
+                    actv.requestFocus();
+                }else if(quantity.isEmpty()){
+                    Toast.makeText(context,"Enter quantity", Toast.LENGTH_SHORT).show();
+                    productQuantityEt.requestFocus();
+                }else{
+                    ingredient.setName(name);
+                    ingredient.setAmount(new BigDecimal(quantity));
+                    ingredient.setBarcode(barcode);
+                    Call<Ingredient> saveProductCall = service.saveIngredient(ingredient);
+                    saveProductCall.enqueue(new Callback<Ingredient>() {
+                        @Override
+                        public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
+                            if(response.isSuccessful() && response.body() != null){
+                                ingredient = response.body();
+                                addToList(ingredient);
+                                Toast.makeText(context,"Product added successfully!", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Ingredient> call, Throwable t) {
+                            Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    dialog.dismiss();
+                }
+
+            }
+        });
+        dialog.show();
+    }
+    private void showProductFoundDialog(){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.product_found_popup);
+        dialog.getWindow();
+        TextView productNameTv = dialog.findViewById(R.id.productNameTv);
+        productNameTv.setText(ingredient.getName());
+        TextView quantityTv = dialog.findViewById(R.id.productQuantityTv);
+        quantityTv.setText(String.valueOf(ingredient.getAmount()));
+        TextView quantityUnitTv = dialog.findViewById(R.id.productQuantityUnitTv);
+        quantityUnitTv.setText(ingredient.getGenericIngredient().getMeasuringUnit().getName());
+        TextView genericIngTv = dialog.findViewById(R.id.genericIngTv);
+        genericIngTv.setText(ingredient.getGenericIngredient().getName());
+        Button saveBtn = dialog.findViewById(R.id.addProductBtn);
+        Button cancelBtn = dialog.findViewById(R.id.cancelAddProductBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToList(ingredient);
+                ingredient = null;
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+        ingredient = null;
+    }
+    private void addToList(Ingredient ingredient){
+
     }
 }

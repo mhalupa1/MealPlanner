@@ -18,6 +18,9 @@ public class Ingredient {
         this.genericIngredient = genericIngredient;
     }
 
+    public Ingredient() {
+    }
+
     public int getId() {
         return id;
     }

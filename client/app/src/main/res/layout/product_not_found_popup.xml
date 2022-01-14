@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="375dp"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@drawable/popup_style"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:text="No product for scanned barcode"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:gravity="center"
+        ></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:padding="5dp"
+        android:gravity="center"
+        android:text="Please enter product details so we can add it to our database:"></TextView>
+
+       <EditText
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:hint="Enter product name"
+           android:id="@+id/productNameEt"
+           android:layout_margin="10dp"
+           android:background="@drawable/custom_edittext"
+           android:paddingLeft="10dp"
+           ></EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="Select what type of product this is:"
+        android:layout_margin="5dp"></TextView>
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:completionThreshold="1"
+        android:id="@+id/productAutoCompleteTv"
+        android:hint="Generic name, eg. milk"
+        android:background="@drawable/custom_edittext"
+        android:layout_margin="10dp"
+        android:paddingLeft="10dp"
+        ></AutoCompleteTextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:hint="Enter quantity"
+            android:id="@+id/productQuantityEt"
+            android:inputType="numberDecimal"
+            android:background="@drawable/custom_edittext"
+            android:layout_margin="10dp"
+            android:paddingLeft="10dp"
+            ></EditText>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Unit"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/quantityUnitTv"
+            android:layout_margin="10dp"></TextView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_gravity="center"
+                android:id="@+id/cancelProductBtn"
+                android:backgroundTint="@color/dark_accent"
+                android:gravity="center"></Button>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="0.5">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save and add"
+                android:layout_gravity="center"
+                android:id="@+id/saveProductBtn"
+                android:gravity="center"></Button>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

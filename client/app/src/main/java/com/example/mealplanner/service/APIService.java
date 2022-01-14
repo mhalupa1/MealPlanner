@@ -57,7 +57,7 @@ public interface APIService {
     @POST("/saveIngredient")
     Call<Ingredient> saveIngredient(@Body Ingredient ingredient);
 
-    @GET
+    @GET("/getIngredientByBarcode")
     Call<ResponseBody> getIngredientByBarcode(@Query("barcode") String barcode);
 
 
