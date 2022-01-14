@@ -24,4 +24,5 @@ public class GenericIngredientController {
     public GenericIngredient getOne(@RequestParam int id){
         return service.getOne(id);
     }
+
 }

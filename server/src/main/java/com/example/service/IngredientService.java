@@ -28,4 +28,8 @@ public class IngredientService {
     public Ingredient getByBarcode(String barcode){
         return repo.getByBarcode(barcode);
     }
+
+    public List<Ingredient> getManyById(List<Integer> ids){
+        return repo.getByGenericIds(ids);
+    }
 }

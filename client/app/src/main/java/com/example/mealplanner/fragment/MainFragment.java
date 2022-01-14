@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.Category;
@@ -48,57 +49,64 @@ public class MainFragment extends Fragment {
 
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        APIClient APIClient = new APIClient();
+        Retrofit retrofit = APIClient.getClient();
+        service = retrofit.create(APIService.class);
+
         SharedPreferences pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
 
-        if(pref.contains("categories") && pref.contains("genericIngredients")){
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,BarcodeFragment.class,null).commit();
-        }else{
-            Gson gson = new Gson();
-            APIClient APIClient = new APIClient();
-            Retrofit retrofit = APIClient.getClient();
-            service = retrofit.create(APIService.class);
-
-            Call<List<Category>> categoryCall = service.getCategories();
-            categoryCall.enqueue(new Callback<List<Category>>() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
-                @Override
-                public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                    if(response.isSuccessful()){
-                        List<Category> categories = response.body();
-                        categories.sort(Comparator.comparing(Category::getName));
-                        String cat = gson.toJson(categories);
-                        pref.edit().putString("categories", gson.toJson(categories)).apply();
-                    }
+        Call<List<Category>> categoryCall = service.getCategories();
+        categoryCall.enqueue(new Callback<List<Category>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if(response.isSuccessful()){
+                    List<Category> categories = response.body();
+                    categories.sort(Comparator.comparing(Category::getName));
+                    pref.edit().putString("categories", gson.toJson(categories)).apply();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<List<Category>> call, Throwable t) {
-                    t.printStackTrace();
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+        Call<List<GenericIngredient>> genIngCall = service.getGenericIngredients();
+
+        genIngCall.enqueue(new Callback<List<GenericIngredient>>() {
+            @Override
+            public void onResponse(Call<List<GenericIngredient>> call, Response<List<GenericIngredient>> response) {
+                if(response.isSuccessful()){
+                    List<GenericIngredient> ingredients = response.body();
+                    pref.edit().putString("genericIngredients", gson.toJson(ingredients)).apply();
                 }
-            });
+            }
 
-            Call<List<GenericIngredient>> genIngCall = service.getGenericIngredients();
+            @Override
+            public void onFailure(Call<List<GenericIngredient>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
 
-            genIngCall.enqueue(new Callback<List<GenericIngredient>>() {
-                @Override
-                public void onResponse(Call<List<GenericIngredient>> call, Response<List<GenericIngredient>> response) {
-                    if(response.isSuccessful()){
-                        List<GenericIngredient> ingredients = response.body();
-                        pref.edit().putString("genericIngredients", gson.toJson(ingredients)).apply();
-                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<GenericIngredient>> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-        }
-
-
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, PantryFragment.class, null).commit();
 
 
         return view;
     }
+
+
+    View.OnClickListener viewIngrsBtnListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
+        }
+    };
+
+
+
 }

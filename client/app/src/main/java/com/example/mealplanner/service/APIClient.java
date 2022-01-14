@@ -1,5 +1,9 @@
 package com.example.mealplanner.service;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.mealplanner.adapter.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
 
     private static Retrofit retrofit = null;
-    private static String baseUrl = "http://192.168.1.104:8080"; //"http://192.168.100.19:8080";192.168.1.104
+    private static String baseUrl = "http://192.168.1.112:8080";
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

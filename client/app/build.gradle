@@ -43,12 +43,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.thoughtbot:expandablecheckrecyclerview:1.4'
+
     implementation 'com.thoughtbot:expandablerecyclerview:1.4'
     runtimeOnly group: 'com.google.android.material', name: 'material', version: '1.6.0-alpha01'
     implementation 'androidx.recyclerview:recyclerview-selection:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
 
 
 

@@ -12,8 +12,6 @@ public class PantryIngredient {
     private BigDecimal amount;
 
 
-
-
     public PantryIngredient(int id, Pantry pantry, Ingredient ingredient, LocalDate expirationDate, BigDecimal amount) {
         this.id = id;
         this.expirationDate = expirationDate;
@@ -21,6 +19,14 @@ public class PantryIngredient {
         this.pantry = pantry;
         this.ingredient = ingredient;
     }
+
+    public PantryIngredient(LocalDate expirationDate, BigDecimal amount, Pantry pantry, Ingredient ingredient) {
+        this.expirationDate = expirationDate;
+        this.amount = amount;
+        this.pantry = pantry;
+        this.ingredient = ingredient;
+    }
+
 
     public int getId() {
         return id;

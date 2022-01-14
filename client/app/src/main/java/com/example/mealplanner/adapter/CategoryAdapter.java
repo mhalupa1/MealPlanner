@@ -1,5 +1,7 @@
 package com.example.mealplanner.adapter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +14,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
+import com.example.mealplanner.model.util.IngredientConfirmItem;
 import com.example.mealplanner.wrapper.CategoryListWrapper;
 import com.example.mealplanner.wrapper.GenericIngredientListWrapper;
+import com.google.gson.Gson;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewHolder,GenericIngredientViewHolder> {
 
     LayoutInflater inflater;
 
+    private List<CategoryViewHolder> parentViewHolders;
+    private List<GenericIngredientViewHolder> childViewHolders;
 
-    public CategoryAdapter(List<? extends ExpandableGroup> groups, LayoutInflater inflater) {
+
+    public CategoryAdapter(List<? extends ExpandableGroup> groups, LayoutInflater inflater, Context context) {
         super(groups);
         this.inflater = inflater;
+        childViewHolders = new LinkedList<>();
     }
 
     @Override
@@ -48,15 +59,37 @@ public class CategoryAdapter extends ExpandableRecyclerViewAdapter<CategoryViewH
         holder.setGenericIngredient(genericIngredient);
         holder.setTexts();
 
+
         if(genericIngredient.isSelected()){
             holder.getCheckBox().setChecked(true);
         } else {
             holder.getCheckBox().setChecked(false);
         }
+
+        childViewHolders.add(holder);
     }
 
     @Override
     public void onBindGroupViewHolder(CategoryViewHolder holder, int flatPosition, ExpandableGroup group) {
         holder.setCategoryTitle(group);
     }
+
+    public List<IngredientConfirmItem> onDestroy(){
+        List<IngredientConfirmItem> confirmItems = new LinkedList<>();
+        for(GenericIngredientViewHolder holder : childViewHolders){
+            if(holder.getGenericIngredient().isSelected()){
+                IngredientConfirmItem item = holder.getConfirmItem();
+                confirmItems.add(item);
+            }
+        }
+        return confirmItems;
+    }
+
+    public void notifyGroupDataChanged() {
+        expandableList.expandedGroupIndexes = new boolean[getGroups().size()];
+        for (int i = 0; i < getGroups().size(); i++) {
+            expandableList.expandedGroupIndexes[i] = false;
+        }
+    }
+
 }

@@ -31,6 +31,12 @@ public class IngredientController {
         return service.save(ingredient);
     }
 
+    @PostMapping(value = "/getIngredientsByGenericId")
+    public List<Ingredient> getManyByGenericId(@RequestBody List<Integer> ids){
+        List<Ingredient> ing = service.getManyById(ids);
+        return ing;
+    }
+
     @GetMapping(value = "/getIngredientByBarcode")
     public ResponseEntity getByBarcode(@RequestParam String barcode){
         Ingredient ingredient = service.getByBarcode(barcode);
