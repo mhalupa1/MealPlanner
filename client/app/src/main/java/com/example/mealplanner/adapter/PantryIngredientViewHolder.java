@@ -17,6 +17,8 @@ public class PantryIngredientViewHolder extends RecyclerView.ViewHolder {
     private TextView textView;
     private ImageView arrowImage;
     private RecyclerView nestedRecyclerView;
+    private TextView totalAmount;
+    private TextView totalAmountType;
 
     public PantryIngredientViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -26,6 +28,8 @@ public class PantryIngredientViewHolder extends RecyclerView.ViewHolder {
         textView = itemView.findViewById(R.id.itemTv);
         arrowImage = itemView.findViewById(R.id.arrowIv);
         nestedRecyclerView = itemView.findViewById(R.id.childRv);
+        totalAmount = itemView.findViewById(R.id.totalAmntTv);
+        totalAmountType = itemView.findViewById(R.id.totalAmntTypeTv);
     }
 
     public LinearLayout getLinearLayout() {
@@ -66,5 +70,21 @@ public class PantryIngredientViewHolder extends RecyclerView.ViewHolder {
 
     public void setNestedRecyclerView(RecyclerView nestedRecyclerView) {
         this.nestedRecyclerView = nestedRecyclerView;
+    }
+
+    public TextView getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(TextView totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public TextView getTotalAmountType() {
+        return totalAmountType;
+    }
+
+    public void setTotalAmountType(TextView totalAmountType) {
+        this.totalAmountType = totalAmountType;
     }
 }

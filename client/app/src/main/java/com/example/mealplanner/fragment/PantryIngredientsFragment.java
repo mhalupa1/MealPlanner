@@ -79,9 +79,8 @@ public class PantryIngredientsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.main_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PantryIngredientAdapter(wrapperArrayList);
+        adapter = new PantryIngredientAdapter(wrapperArrayList,getContext());
         recyclerView.setAdapter(adapter);
-
 
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
@@ -93,9 +92,6 @@ public class PantryIngredientsFragment extends Fragment {
                 if(response.isSuccessful() && response.body() != null){
                     pantryArrayList.addAll(response.body());
                     mapIngredients();
-                    for(PantryIngredientWrapper i : wrapperArrayList){
-                        System.out.println(i);
-                    }
                     adapter.notifyDataSetChanged();
                 }else{
                 }
@@ -113,6 +109,11 @@ public class PantryIngredientsFragment extends Fragment {
 
     private void mapIngredients(){
         HashMap<String, ArrayList<PantryIngredient>> ingredientMap = new HashMap<>();
+        HashMap<String,BigDecimal> amounts = new HashMap<>();
+        String type = null;
+        if(!pantryArrayList.isEmpty()){
+            type = pantryArrayList.get(0).getIngredient().getGenericIngredient().getMeasuringUnit().getName();
+        }
         for(PantryIngredient pantryIngredient : pantryArrayList){
             String key = pantryIngredient.getIngredient().getGenericIngredient().getName();
             if(ingredientMap.containsKey(key)){
@@ -121,11 +122,15 @@ public class PantryIngredientsFragment extends Fragment {
                 ArrayList<PantryIngredient> arrayList = new ArrayList<>();
                 arrayList.add(pantryIngredient);
                 ingredientMap.put(key, arrayList);
-
+            }
+            if(amounts.containsKey(key)){
+                amounts.put(key, amounts.get(key).add(pantryIngredient.getAmount()));
+            }else{
+                amounts.put(key, pantryIngredient.getAmount());
             }
         }
         for (Map.Entry<String, ArrayList<PantryIngredient>> entry : ingredientMap.entrySet()) {
-            wrapperArrayList.add(new PantryIngredientWrapper(entry.getValue(), entry.getKey()));
+            wrapperArrayList.add(new PantryIngredientWrapper(entry.getValue(), entry.getKey(), amounts.get(entry.getKey()),type));
         }
     }
 }

@@ -33,7 +33,7 @@ public class PantryIngredientController {
     @RequestBody PantryIngredient pantryIngredient){
         PantryIngredient pantryIng = service.update(id,pantryIngredient);
         if (pantryIngredient != null){
-            return ResponseEntity.ok(pantryIng);
+            return ResponseEntity.status(HttpStatus.OK).body("Updated succesfully");
         } else {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

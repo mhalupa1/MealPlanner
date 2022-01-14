@@ -2,17 +2,38 @@ package com.example.mealplanner.wrapper;
 
 import com.example.mealplanner.model.PantryIngredient;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class PantryIngredientWrapper {
     private ArrayList<PantryIngredient> nestedList;
     private String itemText;
     private boolean isExpandable;
+    private BigDecimal totalAmount;
+    private String getTotalAmountType;
 
-    public PantryIngredientWrapper(ArrayList<PantryIngredient> nestedList, String itemText) {
+    public PantryIngredientWrapper(ArrayList<PantryIngredient> nestedList, String itemText, BigDecimal totalAmount, String getTotalAmountType) {
         this.nestedList = nestedList;
         this.itemText = itemText;
-        this.isExpandable = true;
+        this.totalAmount = totalAmount;
+        this.getTotalAmountType = getTotalAmountType;
+        isExpandable = true;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getGetTotalAmountType() {
+        return getTotalAmountType;
+    }
+
+    public void setGetTotalAmountType(String getTotalAmountType) {
+        this.getTotalAmountType = getTotalAmountType;
     }
 
     public ArrayList<PantryIngredient> getNestedList() {
@@ -39,12 +60,4 @@ public class PantryIngredientWrapper {
         isExpandable = expandable;
     }
 
-    @Override
-    public String toString() {
-        return "PantryIngredientWrapper{" +
-                "nestedList=" + nestedList +
-                ", itemText='" + itemText + '\'' +
-                ", isExpandable=" + isExpandable +
-                '}';
-    }
 }

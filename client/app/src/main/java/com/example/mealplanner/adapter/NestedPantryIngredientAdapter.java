@@ -1,5 +1,6 @@
 package com.example.mealplanner.adapter;
 
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.PantryIngredient;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class NestedPantryIngredientAdapter extends RecyclerView.Adapter<NestedPantryIngredientViewHolder> {
-    ArrayList<PantryIngredient> nestedList;
-    OnItemsChangedListener onItemsChangedListener;
+    private ArrayList<PantryIngredient> nestedList;
+    private OnItemsChangedListener onItemsChangedListener;
     public NestedPantryIngredientAdapter(ArrayList<PantryIngredient> nestedList) {
         this.nestedList = nestedList;
     }
 
     public interface OnItemsChangedListener{
-        void onDateChanged(int position);
-        void onAmountChanged(int position);
-        void onLongItemClick(View view, int position);
+        void onDateChanged(Editable editable, int p);
+        void onAmountChanged(String amount, int p);
+        void onLongItemClick(View view, int p);
     }
-
 
     public void setOnItemsChangedListener(OnItemsChangedListener onItemsChangedListener){
         this.onItemsChangedListener = onItemsChangedListener;
@@ -44,9 +46,13 @@ public class NestedPantryIngredientAdapter extends RecyclerView.Adapter<NestedPa
         }else{
             holder.getPantryIngTv().setText(p.getIngredient().getName());
         }
-        holder.getDatePicker().setText(p.getExpirationDate().toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern ( "dd/MM/yy" , Locale.UK );
+        String date = formatter.format(p.getExpirationDate());
+        double amnt = p.getIngredient().getGenericIngredient().getMeasuringUnit().getDefaultAmount();
+        holder.setDefaultAmount((float)amnt);
+        holder.getDatePicker().setText(date);
         holder.getAmntEt().setText(p.getAmount().toString());
-        holder.getInitAmount();
+        holder.getInitValues();
         holder.getAmountTypeTv().setText(p.getIngredient().getGenericIngredient().getMeasuringUnit().getName());
 
     }

@@ -49,7 +49,7 @@ public interface APIService {
     Call<PantryIngredient> savePantryIngredient(@Body PantryIngredient pantryIngredient);
 
     @PUT("updatePantryIngredient")
-    Call<PantryIngredient> updatePantryIngredient(@Query("id") int id, @Body PantryIngredient pantryIngredient);
+    Call<ResponseBody> updatePantryIngredient(@Query("id") int id, @Body PantryIngredient pantryIngredient);
 
     @DELETE("/deletePantryIngredient")
     Call<ResponseBody> deletePantryIngredient(@Query("id") int id);

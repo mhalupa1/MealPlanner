@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +27,11 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
     private ImageView increaseAmnt;
     private TextView amountTypeTv;
     final Calendar calendar = Calendar.getInstance();
-    private float currAmnt;
     private float initAmnt;
+    private boolean amountChanged = false;
+    private boolean dateInitialized = false;
+    private String latestDate;
+    private float defaultAmount;
     public NestedPantryIngredientViewHolder(@NonNull View itemView, NestedPantryIngredientAdapter.OnItemsChangedListener listener) {
         super(itemView);
         pantryIngTv = itemView.findViewById(R.id.pantryIngTv);
@@ -39,35 +43,31 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         decreaseAmnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                amntEt.clearFocus();
+                amntEt.setFocusable(false);
                 float changedAmnt = Float.valueOf(amntEt.getText().toString().trim());
-                if(changedAmnt != currAmnt){
-                    if(changedAmnt > 0){
-                        --changedAmnt;
-                        amntEt.setText(String.valueOf(changedAmnt));
-                    }
-                }else{
-                    if(currAmnt > 0){
-                        currAmnt -= initAmnt;
-                        amntEt.setText(String.valueOf(currAmnt));
-                    }
-                }
-
+                float newAmount = changedAmnt - defaultAmount;
+                if(!(newAmount >= 0))
+                    newAmount = 0.0f;
+                amntEt.setText(String.valueOf(newAmount));
+                listener.onAmountChanged(String.valueOf(newAmount), getAdapterPosition());
 
             }
         });
         increaseAmnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                amntEt.clearFocus();
+                amntEt.setFocusable(false);
                 float changedAmnt = Float.valueOf(amntEt.getText().toString().trim());
-                if(changedAmnt != currAmnt){
-                    ++changedAmnt;
-                    amntEt.setText(String.valueOf(changedAmnt));
-                }else{
-                    currAmnt += initAmnt;
-                    amntEt.setText(String.valueOf(currAmnt));
-                }
+                changedAmnt += defaultAmount;
+                amntEt.setText(String.valueOf(changedAmnt));
+                listener.onAmountChanged(String.valueOf(changedAmnt), getAdapterPosition());
+            }
+        });
+        amntEt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                amntEt.setFocusable(true);
+                amntEt.requestFocus();
             }
         });
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -83,6 +83,30 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(view.getContext(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        datePicker.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!dateInitialized){
+                    dateInitialized = true;
+                }else{
+                    if(!latestDate.equals(editable.toString())){
+                        latestDate = editable.toString();
+                        listener.onDateChanged(editable,getAdapterPosition());
+                    }
+
+                }
             }
         });
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -111,44 +135,42 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(listener != null){
-                    int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        listener.onAmountChanged(position);
+                Float amount;
+                try{
+                    amount = Float.valueOf(editable.toString());
+                    if(initAmnt != amount){
+                        amountChanged = true;
                     }
+                }catch(Exception e){
+
                 }
+
             }
         });
-        datePicker.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        amntEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(listener != null){
-                    int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        listener.onDateChanged(position);
-                    }
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus && amountChanged) {
+                    String amount = amntEt.getText().toString().trim();
+                    listener.onAmountChanged(amount, getAdapterPosition());
+                    amountChanged = false;
                 }
+
             }
         });
+
     }
-    private void updateLabel() {
+    public void setDefaultAmount(float defaultAmount){
+        this.defaultAmount = defaultAmount;
+    }
+   private void updateLabel() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.UK);
         datePicker.setText(dateFormat.format(calendar.getTime()));
     }
-    public void getInitAmount(){
+    public void getInitValues(){
         initAmnt = Float.valueOf(amntEt.getText().toString().trim());
-        currAmnt = initAmnt;
+        latestDate = datePicker.getText().toString();
     }
 
     public TextView getAmountTypeTv() {
