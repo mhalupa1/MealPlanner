@@ -120,6 +120,8 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
                                 mList.remove(holder.getAdapterPosition());
                                 notifyItemRemoved(holder.getAdapterPosition());
                             }else{
+                                BigDecimal newAmnt = mList.get(holder.getAdapterPosition()).getTotalAmount().subtract(amount);
+                                mList.get(holder.getAdapterPosition()).setTotalAmount(newAmnt);
                                 if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
                                     notifyItemChanged(holder.getAdapterPosition());
                                 }
