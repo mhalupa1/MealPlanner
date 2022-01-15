@@ -98,9 +98,10 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
                 saveChanges(pantryIngredient, holder.getAdapterPosition(),p);
                 BigDecimal curr = new BigDecimal(amount).subtract(old);
                 mList.get(holder.getAdapterPosition()).setTotalAmount(mList.get(holder.getAdapterPosition()).getTotalAmount().add(curr));
-                if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
+                /*if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
                     notifyItemChanged(holder.getAdapterPosition());
-                }
+                }*/
+                holder.getTotalAmount().setText(String.valueOf(mList.get(holder.getAdapterPosition()).getTotalAmount()));
             }
 
             @Override
