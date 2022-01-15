@@ -102,13 +102,13 @@ public class PantryIngredientsFragment extends Fragment {
 
     private void mapIngredients(){
         HashMap<String, ArrayList<PantryIngredient>> ingredientMap = new HashMap<>();
+        HashMap<String,String> types = new HashMap<>();
         HashMap<String,BigDecimal> amounts = new HashMap<>();
-        String type = null;
-        if(!pantryArrayList.isEmpty()){
-            type = pantryArrayList.get(0).getIngredient().getGenericIngredient().getMeasuringUnit().getName();
-        }
         for(PantryIngredient pantryIngredient : pantryArrayList){
             String key = pantryIngredient.getIngredient().getGenericIngredient().getName();
+            if(!types.containsKey(key)){
+                types.put(key,pantryIngredient.getIngredient().getGenericIngredient().getMeasuringUnit().getName());
+            }
             if(ingredientMap.containsKey(key)){
                 ingredientMap.get(key).add(pantryIngredient);
             }else{
@@ -123,7 +123,7 @@ public class PantryIngredientsFragment extends Fragment {
             }
         }
         for (Map.Entry<String, ArrayList<PantryIngredient>> entry : ingredientMap.entrySet()) {
-            wrapperArrayList.add(new PantryIngredientWrapper(entry.getValue(), entry.getKey(), amounts.get(entry.getKey()),type));
+            wrapperArrayList.add(new PantryIngredientWrapper(entry.getValue(),amounts.get(entry.getKey()) ,entry.getKey(),types.get(entry.getKey())));
         }
     }
 }

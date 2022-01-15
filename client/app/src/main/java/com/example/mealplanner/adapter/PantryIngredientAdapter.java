@@ -2,6 +2,7 @@ package com.example.mealplanner.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,9 +36,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredientViewHolder> {
     private List<PantryIngredientWrapper> mList;
-    private ArrayList<PantryIngredient> nestedList = new ArrayList<>();
+    //private ArrayList<PantryIngredient> nestedList = new ArrayList<>();
     private Context context;
     private APIClient APIClient = new APIClient();
     private Retrofit retrofit = APIClient.getClient();
@@ -64,10 +67,9 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
     @Override
     public void onBindViewHolder(@NonNull PantryIngredientViewHolder holder, int position) {
         PantryIngredientWrapper pantryIngredientWrapper = mList.get(position);
-        nestedList = pantryIngredientWrapper.getNestedList();
         holder.getTextView().setText(pantryIngredientWrapper.getItemText());
         holder.getTotalAmount().setText(pantryIngredientWrapper.getTotalAmount().toString());
-        holder.getTotalAmountType().setText(pantryIngredientWrapper.getGetTotalAmountType());
+        holder.getTotalAmountType().setText(pantryIngredientWrapper.getTotalAmountType());
         boolean isExpandable = pantryIngredientWrapper.isExpandable();
         holder.getExpandableLayout().setVisibility(isExpandable ? View.VISIBLE : View.GONE);
         if(isExpandable){
@@ -75,7 +77,7 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
         }else{
             holder.getArrowImage().setImageResource(R.drawable.arrow_down);
         }
-        NestedPantryIngredientAdapter nestedAdapter = new NestedPantryIngredientAdapter(nestedList);
+        NestedPantryIngredientAdapter nestedAdapter = new NestedPantryIngredientAdapter(mList.get(position).getNestedList());
 
         nestedAdapter.setOnItemsChangedListener(new NestedPantryIngredientAdapter.OnItemsChangedListener() {
             @Override
@@ -83,24 +85,18 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern ( "dd/MM/yy" , Locale.UK );
                 String date = editable.toString();
                 LocalDate ld = LocalDate.parse(date, formatter);
-                PantryIngredient pantryIngredient = nestedList.get(p);
+                PantryIngredient pantryIngredient = mList.get(holder.getAdapterPosition()).getNestedList().get(p);
                 pantryIngredient.setExpirationDate(ld);
-                saveChanges(pantryIngredient, p);
-                mList.get(holder.getAdapterPosition()).setNestedList(nestedList);
-                if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
-                    notifyItemChanged(holder.getAdapterPosition());
-                }
+                saveChanges(pantryIngredient, holder.getAdapterPosition(), p);
             }
 
             @Override
             public void onAmountChanged(String amount, int p) {
-                PantryIngredient pantryIngredient = nestedList.get(p);
+                PantryIngredient pantryIngredient = mList.get(holder.getAdapterPosition()).getNestedList().get(p);
                 BigDecimal old = pantryIngredient.getAmount();
                 pantryIngredient.setAmount(new BigDecimal(amount));
-                saveChanges(pantryIngredient, p);
-                nestedAdapter.notifyItemChanged(p);
-                BigDecimal curr = nestedList.get(p).getAmount().subtract(old);
-                mList.get(holder.getAdapterPosition()).setNestedList(nestedList);
+                saveChanges(pantryIngredient, holder.getAdapterPosition(),p);
+                BigDecimal curr = new BigDecimal(amount).subtract(old);
                 mList.get(holder.getAdapterPosition()).setTotalAmount(mList.get(holder.getAdapterPosition()).getTotalAmount().add(curr));
                 if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
                     notifyItemChanged(holder.getAdapterPosition());
@@ -115,18 +111,15 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if(menuItem.getItemId() == R.id.deletePantry){
-                            int id = nestedList.get(p).getId();
-                            BigDecimal amount = nestedList.get(p).getAmount();
+                            int id = mList.get(holder.getAdapterPosition()).getNestedList().get(p).getId();
+                            BigDecimal amount = mList.get(holder.getAdapterPosition()).getNestedList().get(p).getAmount();
                             deleteIngredient(id);
-                            nestedList.remove(p);
+                            mList.get(holder.getAdapterPosition()).getNestedList().remove(p);
                             nestedAdapter.notifyItemRemoved(p);
-                            if(nestedList.isEmpty()){
+                            if(mList.get(holder.getAdapterPosition()).getNestedList().isEmpty()){
                                 mList.remove(holder.getAdapterPosition());
                                 notifyItemRemoved(holder.getAdapterPosition());
                             }else{
-                                BigDecimal newAmount = mList.get(holder.getAdapterPosition()).getTotalAmount();
-                                mList.get(holder.getAdapterPosition()).setTotalAmount(newAmount.subtract(amount));
-                                mList.get(holder.getAdapterPosition()).setNestedList(nestedList);
                                 if (mRecyclerView != null && !mRecyclerView.isComputingLayout()) {
                                     notifyItemChanged(holder.getAdapterPosition());
                                 }
@@ -170,13 +163,13 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
             }
         });
     }
-    private void saveChanges(PantryIngredient pantryIngredient, int p){
+    private void saveChanges(PantryIngredient pantryIngredient, int parentP, int p){
         Call<ResponseBody> pantryCall = service.updatePantryIngredient(pantryIngredient.getId(),pantryIngredient);
         pantryCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                        nestedList.set(p, pantryIngredient);
+                    mList.get(parentP).getNestedList().set(p, pantryIngredient);
                 }else{
                     Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
                 }
@@ -187,6 +180,13 @@ public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredie
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private BigDecimal getTotalAmount(int position){
+        BigDecimal amount = new BigDecimal(0);
+        for(PantryIngredient ing : mList.get(position).getNestedList()){
+            amount.add(ing.getAmount());
+        }
+        return amount;
     }
 
 }

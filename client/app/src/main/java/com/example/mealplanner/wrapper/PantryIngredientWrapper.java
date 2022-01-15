@@ -10,13 +10,13 @@ public class PantryIngredientWrapper {
     private String itemText;
     private boolean isExpandable;
     private BigDecimal totalAmount;
-    private String getTotalAmountType;
+    private String totalAmountType;
 
-    public PantryIngredientWrapper(ArrayList<PantryIngredient> nestedList, String itemText, BigDecimal totalAmount, String getTotalAmountType) {
+    public PantryIngredientWrapper(ArrayList<PantryIngredient> nestedList,BigDecimal totalAmount, String itemText, String totalAmountType) {
         this.nestedList = nestedList;
         this.itemText = itemText;
+        this.totalAmountType = totalAmountType;
         this.totalAmount = totalAmount;
-        this.getTotalAmountType = getTotalAmountType;
         isExpandable = true;
     }
 
@@ -28,12 +28,12 @@ public class PantryIngredientWrapper {
         this.totalAmount = totalAmount;
     }
 
-    public String getGetTotalAmountType() {
-        return getTotalAmountType;
+    public String getTotalAmountType() {
+        return totalAmountType;
     }
 
-    public void setGetTotalAmountType(String getTotalAmountType) {
-        this.getTotalAmountType = getTotalAmountType;
+    public void setTotalAmountType(String totalAmountType) {
+        this.totalAmountType = totalAmountType;
     }
 
     public ArrayList<PantryIngredient> getNestedList() {
