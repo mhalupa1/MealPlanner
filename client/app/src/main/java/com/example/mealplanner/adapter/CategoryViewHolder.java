@@ -2,6 +2,7 @@ package com.example.mealplanner.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -22,6 +23,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     private List<GenericIngredientListWrapper> items;
     private Context context;
     private View view;
+    private ImageView arrow;
     NestedGenericIngredientAdapter adapter;
 
 
@@ -33,7 +35,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         this.view = itemView;
         this.context = context;
         this.expanded = expanded;
-
+        arrow = itemView.findViewById(R.id.arrowIv1);
         textView = itemView.findViewById(R.id.categoryListItem);
         this.recyclerView = recyclerView;
     }
@@ -47,6 +49,13 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
     }
 
+    public ImageView getArrow() {
+        return arrow;
+    }
+
+    public void setArrow(ImageView arrow) {
+        this.arrow = arrow;
+    }
 
     public void setText(String text) {
         this.textView.setText(text);

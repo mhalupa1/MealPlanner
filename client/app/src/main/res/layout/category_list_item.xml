@@ -10,14 +10,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <TextView
-        android:padding="5dp"
-        android:id="@+id/categoryListItem"
-        android:textSize="25sp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:padding="5dp"
+            android:id="@+id/categoryListItem"
+            android:textSize="25sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TextView>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <ImageView
+            android:id="@+id/arrowIv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_down"
+            android:layout_marginEnd="20dp"
+            />
+    </LinearLayout>
 
-    </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/innerConfirmRecycler"

@@ -64,6 +64,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
         holder.onCreate();
         final boolean isExpanded = position==mExpandedPosition;
         holder.getRecyclerView().setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.getArrow().setImageResource(isExpanded?R.drawable.arrow_up:R.drawable.arrow_down);
         holder.itemView.setActivated(isExpanded);
         holder.setExpanded(isExpanded);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
