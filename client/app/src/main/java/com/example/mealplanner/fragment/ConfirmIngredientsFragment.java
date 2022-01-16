@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -55,6 +56,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -87,10 +89,14 @@ public class ConfirmIngredientsFragment extends Fragment {
         Bundle bundle = getArguments();
         selectedPantry = (Pantry) bundle.getSerializable("pantry");
         Gson gson = new Gson();
+        LanguageMethods.loadLanguage(getContext());
         recyclerView = view.findViewById(R.id.confirmList);
         saveBtn = view.findViewById(R.id.saveIngredientsBtn);
+
         service = APIClient.getClient().create(APIService.class);
+
         String pantryIngredientsStr = pref.getString("pantryIngredients", null);
+        List<PantryIngredient> pantryIngredients = new LinkedList<>();
         if (pantryIngredientsStr != null) {
             pantryIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(pantryIngredientsStr, PantryIngredient[].class)));
         }
@@ -101,6 +107,14 @@ public class ConfirmIngredientsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                pref.edit().putBoolean("backConfirm", true).apply();
+                getParentFragmentManager().popBackStack();
+            }
+        });
         saveBtn.setOnClickListener(saveBtnListener);
 
         // ***BARCODE PART***

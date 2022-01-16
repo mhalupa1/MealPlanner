@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/ingredientListItem"
-        android:layout_width="120dp"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:paddingStart="5dp"
@@ -34,7 +34,7 @@
         android:focusableInTouchMode="false"
         android:hint="Exp. date"
         android:visibility="gone"
-        android:paddingTop="2dp"/>
+        android:paddingTop="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
