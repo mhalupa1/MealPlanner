@@ -112,28 +112,6 @@ public class ConfirmIngredientsFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                pref.edit().putBoolean("backConfirm", true).apply();
-                FragmentManager fm = requireActivity().getSupportFragmentManager();
-                int count = fm.getBackStackEntryCount();
-                int ingListFmCount=0;
-                for(int i = count-1; count >=0;--i){
-                    FragmentManager.BackStackEntry entry = fm.getBackStackEntryAt(i);
-                    if(entry.getName() != null && entry.getName().equals("ingList")){
-                        ingListFmCount++;
-                    }
-                    else {
-                        break;
-                    }
-                }
-                for(int i = 0; i<ingListFmCount; ++i){
-                    fm.popBackStack();
-                }
-            }
-        });
         saveBtn.setOnClickListener(saveBtnListener);
 
         // ***BARCODE PART***
@@ -198,6 +176,7 @@ public class ConfirmIngredientsFragment extends Fragment {
                 public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(getContext(), "Success!", Toast.LENGTH_LONG).show();
+                        pref.edit().putBoolean("confirmed", true).apply();
                         getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, MainFragment.class, null).commit();
                     }
                 }
