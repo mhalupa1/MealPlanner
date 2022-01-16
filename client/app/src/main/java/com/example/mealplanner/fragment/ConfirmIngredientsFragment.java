@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,9 +58,11 @@ public class ConfirmIngredientsFragment extends Fragment {
 
         service = APIClient.getClient().create(APIService.class);
 
-        String checkedIngredientsStr = pref.getString("checkedIngredients", null);
-        List<PantryIngredient> pantryIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(checkedIngredientsStr, PantryIngredient[].class)));
-
+        String pantryIngredientsStr = pref.getString("pantryIngredients", null);
+        List<PantryIngredient> pantryIngredients = new LinkedList<>();
+        if (pantryIngredientsStr != null) {
+            pantryIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(pantryIngredientsStr, PantryIngredient[].class)));
+        }
         adapter = new ConfirmIngredientAdapter(pantryIngredients);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -70,6 +73,7 @@ public class ConfirmIngredientsFragment extends Fragment {
 
         saveBtn.setOnClickListener(saveBtnListener);
 
+
         return view;
     }
 
@@ -78,8 +82,8 @@ public class ConfirmIngredientsFragment extends Fragment {
         public void onClick(View v) {
 
             List<PantryIngredient> list = adapter.getIngredients();
-            if(list.isEmpty()){
-                Toast.makeText(getContext(),"Please insert some items first", Toast.LENGTH_LONG).show();
+            if (list.isEmpty()) {
+                Toast.makeText(getContext(), "Please insert some items first", Toast.LENGTH_LONG).show();
                 return;
             }
             Call<List<PantryIngredient>> call = service.saveAllPantryIngredients(list);
@@ -87,9 +91,9 @@ public class ConfirmIngredientsFragment extends Fragment {
             call.enqueue(new Callback<List<PantryIngredient>>() {
                 @Override
                 public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
-                    if(response.isSuccessful()){
-                        Toast.makeText(getContext(),"Success!", Toast.LENGTH_LONG).show();
-                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, MainFragment.class,null).commit();
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_LONG).show();
+                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, MainFragment.class, null).commit();
                     }
                 }
 

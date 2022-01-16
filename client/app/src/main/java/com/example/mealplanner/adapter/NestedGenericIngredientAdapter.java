@@ -38,8 +38,9 @@ public class NestedGenericIngredientAdapter extends RecyclerView.Adapter<Generic
     public void onBindViewHolder(@NonNull GenericIngredientViewHolder holder, int position) {
         GenericIngredientListWrapper ingredient = genericIngredientList.get(position);
         holder.setGenericIngredient(ingredient);
-        Log.d("ingredient", new Gson().toJson(ingredient));
-        holder.setTexts();
+        if(ingredient.isSelected()) {
+            holder.setSelected();
+        }
     }
 
     @Override
@@ -49,10 +50,6 @@ public class NestedGenericIngredientAdapter extends RecyclerView.Adapter<Generic
 
     public List<GenericIngredientViewHolder> getViewHolders(){
         return viewHolders;
-    }
-
-    public void addViewHolder(GenericIngredientViewHolder holder){
-        viewHolders.add(holder);
     }
 
 }

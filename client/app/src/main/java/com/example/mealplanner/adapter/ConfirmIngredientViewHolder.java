@@ -73,8 +73,8 @@ public class ConfirmIngredientViewHolder extends RecyclerView.ViewHolder {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, day);
-                setDateText();
                 logDateChange(year, month + 1, day);
+                setDateText();
             }
         };
 
