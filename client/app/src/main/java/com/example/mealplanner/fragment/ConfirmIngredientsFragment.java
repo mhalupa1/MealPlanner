@@ -73,7 +73,12 @@ public class ConfirmIngredientsFragment extends Fragment {
     View.OnClickListener saveBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             List<PantryIngredient> list = adapter.getIngredients();
+            if(list.isEmpty()){
+                Toast.makeText(getContext(),"Please insert some items first", Toast.LENGTH_LONG).show();
+                return;
+            }
             Call<List<PantryIngredient>> call = service.saveAllPantryIngredients(list);
 
             call.enqueue(new Callback<List<PantryIngredient>>() {

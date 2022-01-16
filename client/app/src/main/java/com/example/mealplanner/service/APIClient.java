@@ -26,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
 
     private static Retrofit retrofit = null;
-    private static String baseUrl = "http://192.168.1.104:8080";
+    private static String baseUrl = "http://192.168.1.112:8080";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static Retrofit getClient() {

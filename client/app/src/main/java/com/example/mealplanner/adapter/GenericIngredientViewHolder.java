@@ -6,19 +6,22 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
+import com.example.mealplanner.model.GenericIngredient;
 import com.example.mealplanner.model.util.IngredientConfirmItem;
 import com.example.mealplanner.wrapper.GenericIngredientListWrapper;
 import com.google.gson.Gson;
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,7 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class GenericIngredientViewHolder extends ChildViewHolder {
+public class GenericIngredientViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textView;
     private CheckBox checkBox;
@@ -43,8 +46,9 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
     private IngredientConfirmItem confirmItem;
     private SharedPreferences pref;
 
-    public GenericIngredientViewHolder(View itemView) {
+    public GenericIngredientViewHolder(@NonNull View itemView) {
         super(itemView);
+
         pref = itemView.getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
 
         confirmItem = new IngredientConfirmItem();
@@ -54,6 +58,8 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
         amountEt = itemView.findViewById(R.id.amountEt);
         amountTypeTv = itemView.findViewById(R.id.amountTypeTv);
         checkBox.setVisibility(View.VISIBLE);
+
+
 
         checkBox.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,19 +73,19 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
                 amountEt.setVisibility(genericIngredient.isSelected() ? View.VISIBLE : View.GONE);
                 amountTypeTv.setVisibility(genericIngredient.isSelected() ? View.VISIBLE : View.GONE);
 
-                String checkedIngredientsStr = pref.getString("checkedIngredients",null);
+                String checkedIngredientsStr = pref.getString("checkedIngredients", null);
                 if (genericIngredient.isSelected()) {
-                    if(checkedIngredientsStr != null){
-                        IngredientConfirmItem[] arr = gson.fromJson(checkedIngredientsStr,IngredientConfirmItem[].class);
+                    if (checkedIngredientsStr != null) {
+                        IngredientConfirmItem[] arr = gson.fromJson(checkedIngredientsStr, IngredientConfirmItem[].class);
                         checkedIngredients = new ArrayList<>(Arrays.asList(arr));
                     } else {
                         checkedIngredients = new ArrayList<>();
                     }
-                    confirmItem = new IngredientConfirmItem(genericIngredient.getGenericIngredient(),getCalendarDate(),
-                                                Double.valueOf(amountEt.getText().toString()));
+                    confirmItem = new IngredientConfirmItem(genericIngredient.getGenericIngredient(), getCalendarDate(),
+                            Double.valueOf(amountEt.getText().toString()));
                     checkedIngredients.add(confirmItem);
                 } else {
-                    checkedIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(checkedIngredientsStr,IngredientConfirmItem[].class)));
+                    checkedIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(checkedIngredientsStr, IngredientConfirmItem[].class)));
                     checkedIngredients.removeIf(i -> i.getIngredient().getId() == genericIngredient.getGenericIngredient().getId());
                 }
                 pref.edit().putString("checkedIngredients", gson.toJson(checkedIngredients)).apply();
@@ -95,7 +101,7 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, day);
                 updateLabel();
-                logDateChange(year, month+1, day);
+                logDateChange(year, month + 1, day);
             }
         };
 
@@ -107,9 +113,8 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
         });
 
         amountEt.addTextChangedListener(amountEtListener);
-
-
     }
+
 
     public void setName(String name) {
         textView.setText(name);
@@ -137,9 +142,6 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
         return checkBox;
     }
 
-    public void setCheckBox(CheckBox checkBox) {
-        this.checkBox = checkBox;
-    }
 
     private void updateLabel() {
         String myFormat = "dd/MM/yy";
@@ -148,23 +150,33 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void logDateChange(int year, int month, int day){
-        LocalDate date = LocalDate.of(year,month,day);
+    private void logDateChange(int year, int month, int day) {
+        LocalDate date = LocalDate.of(year, month, day);
         confirmItem.setDate(date);
     }
 
-    public void setTexts(){
+    public void setTexts() {
+        if(genericIngredient.isSelected()){
+            datepicker.setVisibility(View.VISIBLE);
+            amountEt.setVisibility(View.VISIBLE);
+            amountTypeTv.setVisibility(View.VISIBLE);
+            checkBox.setChecked(true);
+        }
+        Log.d("genericIngredient", new Gson().toJson(genericIngredient));
+        textView.setText(genericIngredient.getGenericIngredient().getName());
         amountEt.setText(genericIngredient.getGenericIngredient().getMeasuringUnit().getDefaultAmount().toString());
         amountTypeTv.setText(genericIngredient.getGenericIngredient().getMeasuringUnit().getName());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private LocalDate getCalendarDate(){
-        if(calendar.get(Calendar.MONTH) == 0){
+    private LocalDate getCalendarDate() {
+        if (calendar.get(Calendar.MONTH) == 0) {
             return null;
         }
-        return LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
-    };
+        return LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    ;
 
     TextWatcher amountEtListener = new TextWatcher() {
         @Override
@@ -183,10 +195,32 @@ public class GenericIngredientViewHolder extends ChildViewHolder {
         }
     };
 
-    protected IngredientConfirmItem getConfirmItem(){
+    protected IngredientConfirmItem getConfirmItem() {
         return confirmItem;
     }
 
+    public void setDate(LocalDate date) {
+        confirmItem.setDate(date);
+        if (date != null) {
+            Log.d("date", gson.toJson(date));
+            calendar.set(Calendar.YEAR, confirmItem.getDate().getYear());
+            calendar.set(Calendar.MONTH, confirmItem.getDate().getMonthValue() - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, confirmItem.getDate().getDayOfMonth());
+            updateLabel();
+        }
+
+    }
+
+    public void setAmount(Double amount) {
+        this.amountEt.setText(amount.toString());
+        this.confirmItem.setAmount(amount);
+    }
+
+    public void setSelected() {
+        this.genericIngredient.setSelected(true);
+        this.checkBox.setChecked(true);
+        textView.setText("");
+    }
 
 
 

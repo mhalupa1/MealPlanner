@@ -5,14 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,9 +17,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.CategoryAdapter;
-import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
 import com.example.mealplanner.model.Ingredient;
@@ -40,16 +37,12 @@ import com.example.mealplanner.wrapper.CategoryListWrapper;
 import com.example.mealplanner.wrapper.GenericIngredientListWrapper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -141,7 +134,8 @@ public class IngredientListFragment extends Fragment {
 
         }
 
-        adapter = new CategoryAdapter(categoryWrappers, inflater, getContext());
+        Log.d("debug", gson.toJson(categoryWrappers));
+        adapter = new CategoryAdapter(categoryWrappers, getContext());
         View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
 
         scanBtn = view.findViewById(R.id.scanBarcodeBtn);
@@ -154,7 +148,7 @@ public class IngredientListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
-
+        adapter.notifyDataSetChanged();
 
 
         scanBtn.setOnClickListener(scanBtnListener);
@@ -167,7 +161,7 @@ public class IngredientListFragment extends Fragment {
     View.OnClickListener scanBtnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, BarcodeFragment.class, null).commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, BarcodeFragment.class, null);
         }
     };
 
@@ -175,43 +169,39 @@ public class IngredientListFragment extends Fragment {
     private void handleConfirmItemClick() {
 
         List<IngredientConfirmItem> checkedIngredients = adapter.onDestroy();
-        if (checkedIngredients.isEmpty()) {
-            Toast.makeText(getContext(), "Add some ingredients first", Toast.LENGTH_LONG).show();
-            return;
-        }
-        Log.d("checkedIngredients", gson.toJson(checkedIngredients));
-        Call<List<Ingredient>> call = service.getIngredientsByGenericId(checkedIngredients.stream()
-                                                                .map(i -> i.getIngredient().getId()).collect(Collectors.toList()));
         List<PantryIngredient> pantryIngredients = new LinkedList<>();
+        if (!checkedIngredients.isEmpty()) {
+            Log.d("checkedIngredients", gson.toJson(checkedIngredients));
+            Call<List<Ingredient>> call = service.getIngredientsByGenericId(checkedIngredients.stream()
+                    .map(i -> i.getIngredient().getId()).collect(Collectors.toList()));
+            fullIngList = new LinkedList<>();
 
-        fullIngList = new LinkedList<>();
 
-
-        call.enqueue(new Callback<List<Ingredient>>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
-                if (response.isSuccessful()) {
-                    ingredientsList = response.body();
-                    fullIngList.addAll(ingredientsList);
-                    for(Ingredient ing : ingredientsList){
-                        IngredientConfirmItem confirmItem = checkedIngredients.stream()
-                                                                              .filter(i -> i.getIngredient().getId() == ing.getGenericIngredient().getId())
-                                                                              .findFirst().get();;
-                        PantryIngredient pantryIngredient = new PantryIngredient(confirmItem.getDate(), BigDecimal.valueOf(confirmItem.getAmount()),selectedPantry, ing);
-                        pantryIngredients.add(pantryIngredient);
+            call.enqueue(new Callback<List<Ingredient>>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
+                    if (response.isSuccessful()) {
+                        ingredientsList = response.body();
+                        fullIngList.addAll(ingredientsList);
+                        for (Ingredient ing : ingredientsList) {
+                            IngredientConfirmItem confirmItem = checkedIngredients.stream()
+                                    .filter(i -> i.getIngredient().getId() == ing.getGenericIngredient().getId())
+                                    .findFirst().get();
+                            PantryIngredient pantryIngredient = new PantryIngredient(confirmItem.getDate(), BigDecimal.valueOf(confirmItem.getAmount()), selectedPantry, ing);
+                            pantryIngredients.add(pantryIngredient);
+                        }
                     }
-                    pref.edit().putString("checkedIngredients", gson.toJson(pantryIngredients)).apply();
-                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Ingredient>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
+                @Override
+                public void onFailure(Call<List<Ingredient>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }
+        pref.edit().putString("checkedIngredients", gson.toJson(pantryIngredients)).apply();
+        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
     }
 
     TextWatcher searchListener = new TextWatcher() {
@@ -229,41 +219,33 @@ public class IngredientListFragment extends Fragment {
         public void afterTextChanged(Editable s) {
             String text = s.toString();
 
+            List<IngredientConfirmItem> confirmItems = adapter.onDestroy();
+            List<Integer> confirmItemIds = adapter.onDestroy().stream().map(i -> i.getIngredient().getId()).collect(Collectors.toList());
             //search
             List<GenericIngredient> tempIngList = genericIngredients.stream().filter(i -> i.getName().toLowerCase().contains(text.toLowerCase()))
-                                                .collect(Collectors.toList());
-            //Log.d("tempIngList", new Gson().toJson(tempIngList));
+                    .collect(Collectors.toList());
 
             //get categories of matches items
             List<Category> tempCatList = tempIngList.stream().map(i -> i.getCategory())
-                                        .collect(Collectors.toSet()).stream().sorted().collect(Collectors.toList());
-
-            Log.d("tempCatList", new Gson().toJson(tempCatList));
-
-
+                    .collect(Collectors.toSet()).stream().sorted().collect(Collectors.toList());
             List<CategoryListWrapper> wrapperList = new LinkedList<>();
 
-            for(Category category : tempCatList){
+            for (Category category : tempCatList) {
                 //create wrapper objects for adapter
                 List<GenericIngredientListWrapper> categoryIngList = tempIngList.stream()
                         .filter(i -> i.getCategory().getId() == category.getId())
-                        .map(i -> new GenericIngredientListWrapper(i, true)).sorted().collect(Collectors.toList());
+                        .map(i -> new GenericIngredientListWrapper(i, confirmItemIds.contains(i.getId()))).sorted().collect(Collectors.toList());
 
 
                 //replace category wrapper with new wrapper with filtered list
                 CategoryListWrapper newWrapper = new CategoryListWrapper(category, categoryIngList);
-                //Log.d("categoryIngList", new Gson().toJson(categoryIngList));
                 wrapperList.add(newWrapper);
 
             }
-
-            adapter.getGroups().clear();
-            List<CategoryListWrapper> dataset = (List<CategoryListWrapper>) adapter.getGroups();
-            dataset.addAll(wrapperList);
-
-            Log.d("debug", String.valueOf(wrapperList.size()));
-            adapter.notifyGroupDataChanged();
-            adapter.notifyDataSetChanged();
+            adapter.persistData();
+            adapter.updateItems(wrapperList);
+            adapter.updateViewHolders(recyclerView);
+            adapter.retrieveData();
         }
     };
 }
