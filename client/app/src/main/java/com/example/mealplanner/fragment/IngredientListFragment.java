@@ -196,7 +196,7 @@ public class IngredientListFragment extends Fragment {
                                     BigDecimal.valueOf(ing.getGenericIngredient().getMeasuringUnit().getDefaultAmount()), selectedPantry, ing);
                             pantryIngredients.add(pantryIngredient);
                             pref.edit().putString("pantryIngredients", gson.toJson(pantryIngredients)).apply();
-                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
+                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).addToBackStack(null).commit();
 
                         }
                     }
@@ -208,7 +208,7 @@ public class IngredientListFragment extends Fragment {
                 }
             });
         } else {
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).addToBackStack(null).commit();
         }
 
     }
@@ -258,5 +258,7 @@ public class IngredientListFragment extends Fragment {
             adapter.updateItems(wrapperList);
         }
     };
+
+    
 }
 
