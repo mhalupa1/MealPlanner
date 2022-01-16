@@ -109,7 +109,6 @@ public class ConfirmIngredientsFragment extends Fragment {
         adapter.setOnLongItemClickListener(onItemClickListener);
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
 
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {

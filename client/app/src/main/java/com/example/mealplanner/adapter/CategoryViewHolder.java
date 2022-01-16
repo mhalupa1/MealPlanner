@@ -44,7 +44,6 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
     }
 

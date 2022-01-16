@@ -162,7 +162,6 @@ public class IngredientListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewIngList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
         adapter.notifyDataSetChanged();
 
