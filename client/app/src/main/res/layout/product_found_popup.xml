@@ -10,12 +10,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24dp"
-        android:text="Product found"
+        android:text="@string/product_found"
         android:layout_gravity="center"
         android:textStyle="bold"
         android:padding="10dp"
         android:gravity="center"
+        android:id="@+id/productFoundTv"
         ></TextView>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/product_found"
+        android:padding="10dp"
+        android:layout_gravity="center"></ImageView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_accent"
+        android:layout_marginVertical="10dp"
+        ></View>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +41,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:textSize="18dp"
-            android:text="Product name"
+            android:text="@string/product_name"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             ></TextView>
@@ -43,6 +57,13 @@
 
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_accent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        ></View>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +74,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:textSize="18dp"
-            android:text="Generic type"
+            android:text="@string/generic_type"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             ></TextView>
@@ -69,6 +90,13 @@
 
 
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_accent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        ></View>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,7 +108,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:textSize="18dp"
-            android:text="Quantity"
+            android:text="@string/quantity"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             ></TextView>
@@ -110,35 +138,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:layout_marginTop="30dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_weight="0.5"
-            android:gravity="center">
-            <Button
-                android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="@string/cancel"
+                android:textSize="14dp"
                 android:layout_gravity="center"
-                android:id="@+id/cancelAddProductBtn"
-                android:backgroundTint="@color/dark_accent"
-                android:gravity="center"></Button>
+                android:id="@+id/cancelAddProductTv"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:background="?android:attr/selectableItemBackground"
+                ></TextView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
+            android:layout_gravity="center"
             android:layout_weight="0.5">
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:text="@string/add"
                 android:layout_gravity="center"
                 android:id="@+id/addProductBtn"
-                android:gravity="center"></Button>
+                android:gravity="center"
+                android:background="@drawable/button_style"></Button>
         </LinearLayout>
 
     </LinearLayout>

@@ -1,8 +1,13 @@
 package com.example.mealplanner.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mealplanner.R;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
@@ -23,6 +29,7 @@ import com.example.mealplanner.service.APIService;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -37,7 +44,7 @@ public class SignupFragment extends Fragment {
     EditText passwordEt;
     TextView signinInsteadEt;
     Button signupBtn;
-
+    TextView changeLanguageTv;
     APIService service;
     Context context;
 
@@ -52,21 +59,25 @@ public class SignupFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
+
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);
         context = getContext();
-
+        LanguageMethods.loadLanguage(context);
         usernameEt = view.findViewById(R.id.usernameSignupEt);
         passwordEt = view.findViewById(R.id.passwordSignupEt);
         signinInsteadEt = view.findViewById(R.id.signin_instead_tv);
         signupBtn = view.findViewById(R.id.signupBtn);
         signupBtn.setOnClickListener(signupBtnListener);
-
+        changeLanguageTv = view.findViewById(R.id.changeLanguageTv1);
+        changeLanguageTv.setPaintFlags(changeLanguageTv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        changeLanguageTv.setOnClickListener(changeLanguageListener);
         signinInsteadEt.setOnClickListener(signinInsteadListener);
         return view;
     }
@@ -98,13 +109,13 @@ public class SignupFragment extends Fragment {
                             e.printStackTrace();
                         }
                         UserData.setUser(user);
-                        Toast.makeText(context, "Signup success!",
+                        Toast.makeText(context, getContext().getResources().getString(R.string.signup_success),
                                 Toast.LENGTH_LONG).show();
                         FragmentManager fm = getParentFragmentManager();
                         fm.beginTransaction().replace(R.id.fragment_container, LoginFragment.class, null).commit();
                     } else {
                         //TODO: ne radi bas kak spada
-                        Toast.makeText(context, response.body() != null ? response.body().toString() : "Something went wrong",
+                        Toast.makeText(context, response.body() != null ? response.body().toString() : getContext().getResources().getString(R.string.something_wrong),
                                 Toast.LENGTH_LONG).show();
                     }
                 }
@@ -112,8 +123,30 @@ public class SignupFragment extends Fragment {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.d("DEBUG", "Signup failed");
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 }
             });
         }
     };
+    View.OnClickListener changeLanguageListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(changeLanguageTv.getText().toString().equals("Croatian")){
+                LanguageMethods.changeLanguage(getContext(),"hr");
+                reload();
+            }else{
+                LanguageMethods.changeLanguage(getContext(),"en");
+                reload();
+            }
+        }
+    };
+    private void reload(){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            fm.beginTransaction().detach(SignupFragment.this).commitNow();
+            fm.beginTransaction().attach(SignupFragment.this).commitNow();
+        } else {
+            fm.beginTransaction().detach(SignupFragment.this).attach(SignupFragment.this).commit();
+        }
+    }
 }
