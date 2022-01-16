@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -21,8 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +56,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -101,7 +99,6 @@ public class ConfirmIngredientsFragment extends Fragment {
         service = APIClient.getClient().create(APIService.class);
 
         String pantryIngredientsStr = pref.getString("pantryIngredients", null);
-        List<PantryIngredient> pantryIngredients = new LinkedList<>();
         if (pantryIngredientsStr != null) {
             pantryIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(pantryIngredientsStr, PantryIngredient[].class)));
         }
@@ -109,6 +106,8 @@ public class ConfirmIngredientsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setAdapter(adapter);
+        adapter.setOnLongItemClickListener(onItemClickListener);
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
@@ -148,6 +147,25 @@ public class ConfirmIngredientsFragment extends Fragment {
 
         return view;
     }
+
+    ConfirmIngredientAdapter.OnConfirmItemClickListener onItemClickListener = new ConfirmIngredientAdapter.OnConfirmItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            PopupMenu popupMenu = new PopupMenu(context, view);
+            popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    if(menuItem.getItemId() == R.id.deletePantry){
+                        pantryIngredients.remove(position);
+                        adapter.notifyItemRemoved(position);
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
+        }
+    };
 
     View.OnClickListener saveBtnListener = new View.OnClickListener() {
         @Override

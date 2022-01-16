@@ -59,7 +59,6 @@ public class IngredientListFragment extends Fragment {
 
     SharedPreferences pref;
     RecyclerView recyclerView;
-    FloatingActionButton scanBtn;
     EditText searchEt;
 
     final private Gson gson = new Gson();
@@ -156,7 +155,6 @@ public class IngredientListFragment extends Fragment {
         adapter = new CategoryAdapter(categoryWrappers, getContext());
         View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
 
-        scanBtn = view.findViewById(R.id.scanBarcodeBtn);
         searchEt = view.findViewById(R.id.ingListSearch);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -168,20 +166,9 @@ public class IngredientListFragment extends Fragment {
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
         adapter.notifyDataSetChanged();
 
-
-        scanBtn.setOnClickListener(scanBtnListener);
-
         searchEt.addTextChangedListener(searchListener);
         return view;
     }
-
-
-    View.OnClickListener scanBtnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, BarcodeFragment.class, null);
-        }
-    };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void handleConfirmItemClick() {

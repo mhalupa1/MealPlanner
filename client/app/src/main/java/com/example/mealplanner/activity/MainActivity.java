@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.mealplanner.R;
-import com.example.mealplanner.fragment.BarcodeFragment;
 import com.example.mealplanner.fragment.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {

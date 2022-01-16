@@ -35,7 +35,7 @@ public class ConfirmIngredientViewHolder extends RecyclerView.ViewHolder {
     PantryIngredient ingredient;
 
 
-    public ConfirmIngredientViewHolder(@NonNull View itemView) {
+    public ConfirmIngredientViewHolder(@NonNull View itemView, ConfirmIngredientAdapter.OnConfirmItemClickListener listener) {
         super(itemView);
 
         nameTv = itemView.findViewById(R.id.ingredientListItem);
@@ -43,6 +43,20 @@ public class ConfirmIngredientViewHolder extends RecyclerView.ViewHolder {
         amountEt = itemView.findViewById(R.id.amountEt);
         amountTypeTv = itemView.findViewById(R.id.amountTypeTv);
         calendar = Calendar.getInstance();
+
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(listener != null){
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        listener.onItemClick(view,position);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
 
     }

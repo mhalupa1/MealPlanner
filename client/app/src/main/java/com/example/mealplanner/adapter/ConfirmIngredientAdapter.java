@@ -21,17 +21,28 @@ public class ConfirmIngredientAdapter extends RecyclerView.Adapter<ConfirmIngred
 
     private List<PantryIngredient> ingredientList;
     private List<ConfirmIngredientViewHolder> viewHolders;
+    private OnConfirmItemClickListener onConfirmItemClickListener;
+
+    public interface OnConfirmItemClickListener {
+        void onItemClick(View view,int position);
+    }
+
+    public void setOnLongItemClickListener(OnConfirmItemClickListener onConfirmItemClickListener){
+        this.onConfirmItemClickListener = onConfirmItemClickListener;
+    }
 
     public ConfirmIngredientAdapter(List<PantryIngredient> list){
         this.ingredientList = list;
         this.viewHolders = new LinkedList<>();
     }
 
+
+
     @NonNull
     @Override
     public ConfirmIngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredient_list_item,parent,false);
-        ConfirmIngredientViewHolder viewHolder = new ConfirmIngredientViewHolder(view);
+        ConfirmIngredientViewHolder viewHolder = new ConfirmIngredientViewHolder(view, onConfirmItemClickListener);
         viewHolders.add(viewHolder);
         return viewHolder;
     }
@@ -51,5 +62,6 @@ public class ConfirmIngredientAdapter extends RecyclerView.Adapter<ConfirmIngred
     public List<PantryIngredient> getIngredients(){
         return ingredientList;
     }
+
 
 }

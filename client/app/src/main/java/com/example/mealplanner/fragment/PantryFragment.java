@@ -3,8 +3,6 @@ package com.example.mealplanner.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,7 +10,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -28,9 +24,7 @@ import android.widget.Toast;
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.PantryAdapter;
 import com.example.mealplanner.global.LanguageMethods;
-import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Pantry;
-import com.example.mealplanner.model.PantryIngredient;
 import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
@@ -87,7 +81,7 @@ public class PantryFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(pantryAdapter);
-        pantryAdapter.setOnItemClickListener(new PantryAdapter.OnItemClickListener() {
+        pantryAdapter.setOnItemClickListener(new PantryAdapter.OnPantryClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Pantry pantry = pantryArrayList.get(position);
@@ -99,7 +93,7 @@ public class PantryFragment extends Fragment {
                 fm.beginTransaction().replace(R.id.fragment_container,fragment,null).addToBackStack(null).commit();
             }
         });
-        pantryAdapter.setOnLongItemClickListener(new PantryAdapter.OnLongItemClickListener() {
+        pantryAdapter.setOnLongItemClickListener(new PantryAdapter.OnLongPantryClickListener() {
             @Override
             public void onLongItemClick(View view, int position) {
                 PopupMenu popupMenu = new PopupMenu(getContext(), view);
