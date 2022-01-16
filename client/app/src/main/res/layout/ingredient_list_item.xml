@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/ingredientListItem"
-        android:layout_width="160dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:paddingStart="5dp"
