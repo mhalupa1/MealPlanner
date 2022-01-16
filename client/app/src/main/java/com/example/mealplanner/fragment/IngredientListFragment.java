@@ -196,7 +196,9 @@ public class IngredientListFragment extends Fragment {
                                     BigDecimal.valueOf(ing.getGenericIngredient().getMeasuringUnit().getDefaultAmount()), selectedPantry, ing);
                             pantryIngredients.add(pantryIngredient);
                             pref.edit().putString("pantryIngredients", gson.toJson(pantryIngredients)).apply();
-                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("pantry", selectedPantry);
+                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle).commit();
 
                         }
                     }
@@ -208,7 +210,9 @@ public class IngredientListFragment extends Fragment {
                 }
             });
         } else {
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, null).commit();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("pantry", selectedPantry);
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle).commit();
         }
 
     }
