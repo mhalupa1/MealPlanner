@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +73,13 @@ public class ConfirmIngredientsFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                pref.edit().putBoolean("backConfirm", true).apply();
+                getParentFragmentManager().popBackStack();
+            }
+        });
         saveBtn.setOnClickListener(saveBtnListener);
 
 

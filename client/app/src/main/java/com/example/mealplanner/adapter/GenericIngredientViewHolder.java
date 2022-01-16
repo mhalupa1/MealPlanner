@@ -37,7 +37,6 @@ public class GenericIngredientViewHolder extends RecyclerView.ViewHolder {
 
     private TextView textView;
     private CheckBox checkBox;
-    final Calendar calendar = Calendar.getInstance();
     final Gson gson = new Gson();
     private List<GenericIngredientListWrapper> checkedIngredients = new ArrayList<>();
 
@@ -54,8 +53,6 @@ public class GenericIngredientViewHolder extends RecyclerView.ViewHolder {
         textView = itemView.findViewById(R.id.ingredientListItem);
         checkBox = itemView.findViewById(R.id.ingredientListCb);
         checkBox.setVisibility(View.VISIBLE);
-
-
 
         checkBox.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)

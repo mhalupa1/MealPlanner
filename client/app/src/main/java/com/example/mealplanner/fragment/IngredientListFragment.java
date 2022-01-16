@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -113,14 +114,26 @@ public class IngredientListFragment extends Fragment {
 
         List<Category> categories = Arrays.asList(gson.fromJson(pref.getString("categories", ""), Category[].class));
         genericIngredients = Arrays.asList(gson.fromJson(pref.getString("genericIngredients", ""), GenericIngredient[].class));
-        pref.edit().remove("checkedIngredients").apply();
+
+        List<GenericIngredientListWrapper> checkedIngredients = new LinkedList<>();
+        if(!pref.getBoolean("backConfirm",false)) {
+            pref.edit().remove("checkedIngredients").apply();
+        } else {
+            String checkedIngredientsStr = pref.getString("checkedIngredients", null);
+            if(checkedIngredientsStr!= null){
+                checkedIngredients = new ArrayList<>(Arrays.asList(gson.fromJson(checkedIngredientsStr,GenericIngredientListWrapper[].class)));
+            }
+        }
+        pref.edit().remove("backConfirm").apply();
         pref.edit().remove("pantryIngredients").apply();
 
 
         List<CategoryListWrapper> categoryWrappers = new LinkedList<>();
         List<GenericIngredientListWrapper> genericIngredientWrappers = new LinkedList<>();
         for (GenericIngredient ing : genericIngredients) {
-            genericIngredientWrappers.add(new GenericIngredientListWrapper(ing));
+            Optional<GenericIngredientListWrapper> selectedIng = checkedIngredients.stream()
+                    .filter(i -> i.getGenericIngredient().getId() == ing.getId()).findFirst();
+            genericIngredientWrappers.add(new GenericIngredientListWrapper(ing, selectedIng.isPresent()));
         }
 
         for (Category category : categories) {
@@ -259,6 +272,6 @@ public class IngredientListFragment extends Fragment {
         }
     };
 
-    
+
 }
 
