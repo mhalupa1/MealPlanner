@@ -15,11 +15,13 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,7 +117,21 @@ public class ConfirmIngredientsFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 pref.edit().putBoolean("backConfirm", true).apply();
-                getParentFragmentManager().popBackStack();
+                FragmentManager fm = requireActivity().getSupportFragmentManager();
+                int count = fm.getBackStackEntryCount();
+                int ingListFmCount=0;
+                for(int i = count-1; count >=0;--i){
+                    FragmentManager.BackStackEntry entry = fm.getBackStackEntryAt(i);
+                    if(entry.getName() != null && entry.getName().equals("ingList")){
+                        ingListFmCount++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                for(int i = 0; i<ingListFmCount; ++i){
+                    fm.popBackStack();
+                }
             }
         });
         saveBtn.setOnClickListener(saveBtnListener);
@@ -356,4 +372,5 @@ public class ConfirmIngredientsFragment extends Fragment {
         adapter.notifyItemInserted(pantryIngredients.indexOf(pantryIngredient));
         scannedIngredient = null;
     }
+
 }
