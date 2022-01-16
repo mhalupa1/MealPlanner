@@ -34,4 +34,6 @@
     <string name="product_name">Naziv proizvoda</string>
     <string name="generic_type">Vrsta proizvoda</string>
     <string name="quantity">Količina</string>
+    <string name="scan_barcode">Skeniraj barkod</string>
+    <string name="save_ingredients">Spremi sastojke</string>
 </resources>

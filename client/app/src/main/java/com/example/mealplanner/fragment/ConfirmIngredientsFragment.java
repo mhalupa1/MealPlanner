@@ -43,7 +43,8 @@ import com.example.mealplanner.model.Pantry;
 import com.example.mealplanner.model.PantryIngredient;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -66,8 +67,10 @@ import retrofit2.Response;
 public class ConfirmIngredientsFragment extends Fragment {
 
     RecyclerView recyclerView;
-    Button saveBtn;
+    FloatingActionButton saveBtn;
     FloatingActionButton scanBtn;
+    FloatingActionMenu fabMenu;
+
     ConfirmIngredientAdapter adapter;
     APIService service;
     Ingredient scannedIngredient = null;
@@ -92,6 +95,8 @@ public class ConfirmIngredientsFragment extends Fragment {
         LanguageMethods.loadLanguage(getContext());
         recyclerView = view.findViewById(R.id.confirmList);
         saveBtn = view.findViewById(R.id.saveIngredientsBtn);
+        fabMenu = view.findViewById(R.id.floatingMenu);
+        scanBtn = view.findViewById(R.id.barcodeBtn);
 
         service = APIClient.getClient().create(APIService.class);
 
@@ -126,7 +131,6 @@ public class ConfirmIngredientsFragment extends Fragment {
         }
         List<String> list = new ArrayList<>(map.keySet());
         ingredientAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, list);
-        scanBtn = view.findViewById(R.id.barcodeBtn);
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
