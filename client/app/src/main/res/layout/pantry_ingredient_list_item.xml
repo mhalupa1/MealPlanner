@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/pantryIngTv"
-            android:layout_width="match_parent"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:paddingStart="5dp"
@@ -58,9 +58,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/pantryIngAmountEt"
             app:layout_constraintStart_toEndOf="@+id/pantryIngDatePicker"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            android:background="?android:attr/selectableItemBackground"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"></ImageView>
 
         <EditText
@@ -99,9 +99,9 @@
             android:layout_gravity="center"
             android:clickable="true"
             android:src="@drawable/ic_add_circle"
-            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintStart_toEndOf="@+id/pantryIngAmountTypeTv"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"></ImageView>
