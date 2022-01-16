@@ -60,6 +60,7 @@
             app:layout_constraintStart_toEndOf="@+id/pantryIngDatePicker"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
+            android:background="?android:attr/selectableItemBackground"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"></ImageView>
 
         <EditText
@@ -98,6 +99,7 @@
             android:layout_gravity="center"
             android:clickable="true"
             android:src="@drawable/ic_add_circle"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pantryIngAmountTypeTv"

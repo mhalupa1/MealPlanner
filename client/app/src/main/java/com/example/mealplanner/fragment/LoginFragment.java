@@ -2,8 +2,12 @@ package com.example.mealplanner.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mealplanner.R;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.User;
 import com.example.mealplanner.service.APIClient;
@@ -23,6 +28,7 @@ import com.example.mealplanner.service.APIService;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -36,6 +42,7 @@ public class LoginFragment extends Fragment {
     EditText passwordEt;
     TextView signupTv;
     Button loginBtn;
+    TextView changeLanguageTv;
 
     APIService service;
     Context context;
@@ -49,6 +56,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,10 +81,26 @@ public class LoginFragment extends Fragment {
         passwordEt = view.findViewById(R.id.passwordEt);
         loginBtn = view.findViewById(R.id.loginBtn);
         signupTv = view.findViewById(R.id.signup_instead_tv);
+        changeLanguageTv = view.findViewById(R.id.changeLanguageTv);
+        changeLanguageTv.setPaintFlags(changeLanguageTv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         loginBtn.setOnClickListener(loginBtnListener);
         signupTv.setOnClickListener(signupListener);
+        changeLanguageTv.setOnClickListener(changeLanguageListener);
         return view;
     }
+    View.OnClickListener changeLanguageListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(changeLanguageTv.getText().toString().equals("Croatian")){
+                LanguageMethods.changeLanguage(getContext(),"hr");
+                reload();
+            }else{
+                LanguageMethods.changeLanguage(getContext(),"en");
+                reload();
+            }
+        }
+    };
+
 
     View.OnClickListener loginBtnListener = new View.OnClickListener() {
         @Override
@@ -97,7 +121,7 @@ public class LoginFragment extends Fragment {
                             e.printStackTrace();
                         }
                         UserData.setUser(user);
-                        Toast.makeText(context, "Login success!",
+                        Toast.makeText(context, getContext().getResources().getString(R.string.login_success),
                                 Toast.LENGTH_LONG).show();
                         SharedPreferences pref = context.getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
                         pref.edit().putString("user",gson.toJson(user)).apply();
@@ -108,7 +132,7 @@ public class LoginFragment extends Fragment {
 
                     }
                     else {
-                        Toast.makeText(context, "Wrong username or password.",
+                        Toast.makeText(context, getContext().getResources().getString(R.string.wrong_username),
                                 Toast.LENGTH_LONG).show();
                     }
                 }
@@ -129,8 +153,15 @@ public class LoginFragment extends Fragment {
             fm.beginTransaction().replace(R.id.fragment_container,SignupFragment.class,null).commit();
         }
     };
-
-
+    private void reload(){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            fm.beginTransaction().detach(LoginFragment.this).commitNow();
+            fm.beginTransaction().attach(LoginFragment.this).commitNow();
+        } else {
+            fm.beginTransaction().detach(LoginFragment.this).attach(LoginFragment.this).commit();
+        }
+    }
 
 
 }

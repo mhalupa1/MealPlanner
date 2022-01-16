@@ -3,8 +3,12 @@ package com.example.mealplanner.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.PantryAdapter;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Pantry;
 import com.example.mealplanner.model.PantryIngredient;
@@ -61,9 +66,12 @@ public class PantryFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        pantryArrayList.clear();
+        LanguageMethods.loadLanguage(getContext());
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);
@@ -88,7 +96,7 @@ public class PantryFragment extends Fragment {
                 bundle.putSerializable("pantry", pantry);
                 fragment.setArguments(bundle);
                 FragmentManager fm = getParentFragmentManager();
-                fm.beginTransaction().replace(R.id.fragment_container,fragment,null).commit();
+                fm.beginTransaction().replace(R.id.fragment_container,fragment,null).addToBackStack(null).commit();
             }
         });
         pantryAdapter.setOnLongItemClickListener(new PantryAdapter.OnLongItemClickListener() {
@@ -101,9 +109,9 @@ public class PantryFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if(menuItem.getItemId() == R.id.deletePantry){
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Delete Confirmation");
-                            builder.setMessage("Are you sure you want to delete this pantry?");
-                            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            builder.setTitle(getContext().getResources().getString(R.string.delete_confirm));
+                            builder.setMessage(getContext().getResources().getString(R.string.delete_question));
+                            builder.setPositiveButton(getContext().getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Call<ResponseBody> deletePantryCall = service.deletePantry(pantryArrayList.get(position).getId());
@@ -114,7 +122,7 @@ public class PantryFragment extends Fragment {
                                                 pantryArrayList.remove(position);
                                                 pantryAdapter.notifyItemRemoved(position);
                                             }else{
-                                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -126,7 +134,7 @@ public class PantryFragment extends Fragment {
 
                                 }
                             });
-                            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                            builder.setNeutralButton(getContext().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -158,7 +166,7 @@ public class PantryFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Pantry>> call, Throwable t) {
-
+                    Toast.makeText(getContext(), getContext().getResources().getString(R.string.check_network), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -172,8 +180,8 @@ public class PantryFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             final View customLayout = getLayoutInflater().inflate(R.layout.pantry_dialog,null);
             builder.setView(customLayout);
-            builder.setTitle("Add pantry");
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            builder.setTitle(getContext().getResources().getString(R.string.add_pantry));
+            builder.setPositiveButton(getContext().getResources().getString(R.string.add), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     EditText addPantry = customLayout.findViewById(R.id.addPantryEditTxt);
@@ -188,7 +196,7 @@ public class PantryFragment extends Fragment {
                                 pantryArrayList.add(pantry);
                                 pantryAdapter.notifyItemInserted(pantryArrayList.indexOf(pantry));
                             }else{
-                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -201,7 +209,7 @@ public class PantryFragment extends Fragment {
 
                 }
             });
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(getContext().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                 }

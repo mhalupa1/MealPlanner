@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.PantryIngredientAdapter;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.model.Pantry;
 import com.example.mealplanner.model.PantryIngredient;
 import com.example.mealplanner.service.APIClient;
@@ -57,7 +58,9 @@ public class PantryIngredientsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        pantryArrayList.clear();
+        wrapperArrayList.clear();
+        LanguageMethods.loadLanguage(getContext());
         View view = inflater.inflate(R.layout.fragment_pantry_ingredients, container, false);
         FloatingActionButton addPantryIngredientBtn = view.findViewById(R.id.addPantryIngredientBtn);
         addPantryIngredientBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +69,7 @@ public class PantryIngredientsFragment extends Fragment {
                 FragmentManager fm = getParentFragmentManager();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("pantry", pantry);
-                fm.beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,bundle).commit();
+                fm.beginTransaction().replace(R.id.fragment_container,IngredientListFragment.class,bundle).addToBackStack(null).commit();
             }
         });
         recyclerView = view.findViewById(R.id.main_recyclerView);

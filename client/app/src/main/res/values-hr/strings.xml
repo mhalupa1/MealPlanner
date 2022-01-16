@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MealPlanner</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signup_instead">Nemaš korisnički račun? Registriraj se.</string>
+    <string name="signin_instead">Imaš korisnički račun? Prijavi se.</string>
+    <string name="sign_in">Prijavi se</string>
+    <string name="password">Lozinka</string>
+    <string name="username_hint">Korisničko ime</string>
+    <string name="password_hint">Lozinka</string>
+    <string name="sign_up">Registriraj se</string>
+    <string name="language">Engleski</string>
+    <string name="delete">Izbriši</string>
+    <string name="confirm">Potvrdi</string>
+    <string name="no_product_found">Nije pronađen proizvod za skenirani barkod</string>
+    <string name="enter_product_details">Molimo unesite podatke o proizvodu kako bismo ga dodali u bazu podataka:</string>
+    <string name="enter_product_name">Unesite naziv proizvoda</string>
+    <string name="product_type">Odaberite vrstu proivoda:</string>
+    <string name="product_type_hint">Generički naziv, npr. mlijeko</string>
+    <string name="enter_quantity">Unesite količinu</string>
+    <string name="cancel">Poništi</string>
+    <string name="save_add">Spremi i dodaj</string>
+    <string name="delete_confirm">Potvrda brisanja</string>
+    <string name="delete_question">Jeste li sigurni da želite izbrisati smočnicu?</string>
+    <string name="something_wrong">Nešto je pošlo po krivu</string>
+    <string name="check_network">Provjerite internet povezanost</string>
+    <string name="add_pantry">Dodaj smočnicu</string>
+    <string name="add">Dodaj</string>
+    <string name="enter_pantry_name">Unesite naziv smočnice, npr. Hladnjak</string>
+    <string name="login_success">Uspješna prijava</string>
+    <string name="wrong_username">Pogrešno korisničko ime ili lozinska</string>
+    <string name="signup_success">Uspješna registracija!</string>
+    <string name="product_found">Pronađen proizvod</string>
+    <string name="product_name">Naziv proizvoda</string>
+    <string name="generic_type">Vrsta proizvoda</string>
+    <string name="quantity">Količina</string>
+</resources>

@@ -2,6 +2,7 @@ package com.example.mealplanner.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.ConfirmIngredientAdapter;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.model.PantryIngredient;
 import com.example.mealplanner.service.APIClient;
 import com.example.mealplanner.service.APIService;
@@ -28,6 +30,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +51,7 @@ public class ConfirmIngredientsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_confirm_ingredients, container, false);
         SharedPreferences pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-
+        LanguageMethods.loadLanguage(getContext());
         recyclerView = view.findViewById(R.id.confirmList);
         saveBtn = view.findViewById(R.id.saveIngredientsBtn);
 

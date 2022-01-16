@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.mealplanner.R;
 import com.example.mealplanner.adapter.CategoryAdapter;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.global.UserData;
 import com.example.mealplanner.model.Category;
 import com.example.mealplanner.model.GenericIngredient;
@@ -107,7 +108,7 @@ public class IngredientListFragment extends Fragment {
 
         pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
         Gson gson = new Gson();
-
+        LanguageMethods.loadLanguage(getContext());
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);

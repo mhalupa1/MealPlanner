@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/arrow_down.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.14739583333333334" />
+        <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/button_style.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/custom_edittext.xml" value="0.14739583333333334" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/ic_add_circle.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/ic_baseline_add.xml" value="0.2890625" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/drawable/popup_style.xml" value="0.14739583333333334" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/category_list_item.xml" value="0.2346014492753623" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/fragment_barcode.xml" value="0.33" />
+        <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/fragment_confirm_ingredients.xml" value="0.1265625" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/fragment_ingredient_list.xml" value="0.33" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/fragment_login.xml" value="0.22418478260869565" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/fragment_pantry.xml" value="0.2052877138413686" />
@@ -23,7 +25,8 @@
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/pantry_ingredient_list_item.xml" value="0.536" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/pantry_item.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/product_found_popup.xml" value="0.23958333333333334" />
-        <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/product_not_found_popup.xml" value="0.13125" />
+        <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/layout/product_not_found_popup.xml" value="0.25" />
+        <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/menu/ingredient_list_menu.xml" value="0.25" />
         <entry key="..\:/Users/Elena/MealPlanner/client/app/src/main/res/menu/menu_popup.xml" value="0.19479166666666667" />
       </map>
     </option>

@@ -4,11 +4,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.mealplanner.Capture;
 import com.example.mealplanner.R;
+import com.example.mealplanner.global.LanguageMethods;
 import com.example.mealplanner.model.GenericIngredient;
 import com.example.mealplanner.model.Ingredient;
 import com.example.mealplanner.service.APIClient;
@@ -37,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -64,12 +74,14 @@ public class BarcodeFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_barcode, container, false);
         context = getContext();
+        LanguageMethods.loadLanguage(context);
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);
@@ -89,10 +101,9 @@ public class BarcodeFragment extends Fragment {
             public void onClick(View view) {
                 IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
                 intentIntegrator.setPrompt("For flash use volume up key");
-                intentIntegrator.setBeepEnabled(true);
                 intentIntegrator.setOrientationLocked(true);
                 intentIntegrator.setCaptureActivity(Capture.class);
-                intentIntegrator.setTimeout(20000);
+                intentIntegrator.setBeepEnabled(false);
                 intentIntegrator.initiateScan();
             }
         });
@@ -138,12 +149,18 @@ public class BarcodeFragment extends Fragment {
     private void showProductNotFoundDialog(String barcode){
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.product_not_found_popup);
-        dialog.getWindow();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         EditText productNameEt = dialog.findViewById(R.id.productNameEt);
         EditText productQuantityEt = dialog.findViewById(R.id.productQuantityEt);
         TextView quantityUnit = dialog.findViewById(R.id.quantityUnitTv);
         productQuantityEt.setVisibility(View.INVISIBLE);
         quantityUnit.setVisibility(View.INVISIBLE);
+        TextView noProductFound = dialog.findViewById(R.id.noProductFoundTv);
+        TextPaint paint = noProductFound.getPaint();
+        Shader textShader=new LinearGradient(0, 0, paint.measureText(noProductFound.getText().toString()),paint.getTextSize() ,
+                new int[]{Color.RED,Color.YELLOW},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        noProductFound.getPaint().setShader(textShader);
         AutoCompleteTextView actv = dialog.findViewById(R.id.productAutoCompleteTv);
         actv.setAdapter(adapter);
 
@@ -158,7 +175,7 @@ public class BarcodeFragment extends Fragment {
             }
         });
         Button saveBtn = dialog.findViewById(R.id.saveProductBtn);
-        Button cancelBtn = dialog.findViewById(R.id.cancelProductBtn);
+        TextView cancelBtn = dialog.findViewById(R.id.cancelProductTv);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -212,7 +229,7 @@ public class BarcodeFragment extends Fragment {
     private void showProductFoundDialog(){
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.product_found_popup);
-        dialog.getWindow();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView productNameTv = dialog.findViewById(R.id.productNameTv);
         productNameTv.setText(ingredient.getName());
         TextView quantityTv = dialog.findViewById(R.id.productQuantityTv);
@@ -222,7 +239,13 @@ public class BarcodeFragment extends Fragment {
         TextView genericIngTv = dialog.findViewById(R.id.genericIngTv);
         genericIngTv.setText(ingredient.getGenericIngredient().getName());
         Button saveBtn = dialog.findViewById(R.id.addProductBtn);
-        Button cancelBtn = dialog.findViewById(R.id.cancelAddProductBtn);
+        TextView cancelBtn = dialog.findViewById(R.id.cancelAddProductTv);
+        TextView productFound = dialog.findViewById(R.id.productFoundTv);
+        TextPaint paint = productFound.getPaint();
+        Shader textShader=new LinearGradient(0, 0, paint.measureText(productFound.getText().toString()),paint.getTextSize() ,
+                new int[]{Color.GREEN,Color.BLUE},
+                new float[]{0, 1}, Shader.TileMode.CLAMP);
+        productFound.getPaint().setShader(textShader);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
             android:id="@+id/ingListConfirm"
-            android:title="Confirm">
-
+            android:title="@string/confirm">
         </item>
 
 </menu>
