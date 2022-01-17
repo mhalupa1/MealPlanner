@@ -129,7 +129,7 @@ public class ConfirmIngredientsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
-                intentIntegrator.setPrompt("For flash use volume up key");
+                intentIntegrator.setPrompt(getContext().getResources().getString(R.string.flash_volume));
                 intentIntegrator.setOrientationLocked(true);
                 intentIntegrator.setCaptureActivity(Capture.class);
                 intentIntegrator.setBeepEnabled(false);
@@ -168,7 +168,7 @@ public class ConfirmIngredientsFragment extends Fragment {
 
             List<PantryIngredient> list = adapter.getIngredients();
             if (list.isEmpty()) {
-                Toast.makeText(getContext(), "Please insert some items first", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.insert_items_first), Toast.LENGTH_LONG).show();
                 return;
             }
             Call<List<PantryIngredient>> call = service.saveAllPantryIngredients(list);
@@ -177,7 +177,7 @@ public class ConfirmIngredientsFragment extends Fragment {
                 @Override
                 public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Success!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getContext().getResources().getString(R.string.success), Toast.LENGTH_LONG).show();
                         pref.edit().putBoolean("confirmed", true).apply();
                         getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, MainFragment.class, null).commit();
                     }
@@ -216,7 +216,7 @@ public class ConfirmIngredientsFragment extends Fragment {
                         if(scannedIngredient != null){
                             showProductFoundDialog();
                         }else{
-                            Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                         }
                     }else{
                         showProductNotFoundDialog(barcode);
@@ -225,7 +225,7 @@ public class ConfirmIngredientsFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -277,13 +277,13 @@ public class ConfirmIngredientsFragment extends Fragment {
                 String name = productNameEt.getText().toString().trim();
                 String quantity = productQuantityEt.getText().toString().trim();
                 if(name.isEmpty()){
-                    Toast.makeText(context,"Enter product name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,getContext().getResources().getString(R.string.enter_product_name), Toast.LENGTH_SHORT).show();
                     productNameEt.requestFocus();
                 }else if(scannedIngredient == null || scannedIngredient.getGenericIngredient() == null){
-                    Toast.makeText(context,"Choose product type", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,getContext().getResources().getString(R.string.choose_product_type), Toast.LENGTH_SHORT).show();
                     actv.requestFocus();
                 }else if(quantity.isEmpty()){
-                    Toast.makeText(context,"Enter quantity", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,getContext().getResources().getString(R.string.enter_quantity), Toast.LENGTH_SHORT).show();
                     productQuantityEt.requestFocus();
                 }else{
                     scannedIngredient.setName(name);
@@ -298,13 +298,13 @@ public class ConfirmIngredientsFragment extends Fragment {
                                 addToList(scannedIngredient);
                                 Toast.makeText(context,"Product added successfully!", Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Ingredient> call, Throwable t) {
-                            Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,getContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                         }
                     });
                     dialog.dismiss();

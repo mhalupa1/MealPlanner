@@ -36,4 +36,9 @@
     <string name="quantity">Količina</string>
     <string name="scan_barcode">Skeniraj barkod</string>
     <string name="save_ingredients">Spremi sastojke</string>
+    <string name="flash_volume">For flash use volume up key</string>
+    <string name="insert_items_first">Please insert some items first</string>
+    <string name="success">Success!</string>
+    <string name="product_add_success">Product added successfully!</string>
+    <string name="choose_product_type">Choose product type</string>
 </resources>

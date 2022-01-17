@@ -36,5 +36,10 @@
     <string name="quantity">Quantity</string>
     <string name="scan_barcode">Scan barcode</string>
     <string name="save_ingredients">Save ingredients</string>
+    <string name="flash_volume">Za bljeskalicu koristite gumb za pojačavanje zvuka</string>
+    <string name="insert_items_first">Prvo unesite neke sastojke</string>
+    <string name="success">Uspješno dodano!</string>
+    <string name="product_add_success">Proizvod uspješno spremljen!</string>
+    <string name="choose_product_type">Odaberite vrstu proizvoda</string>
 
 </resources>

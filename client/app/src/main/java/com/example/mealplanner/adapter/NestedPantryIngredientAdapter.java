@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.model.PantryIngredient;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -48,8 +49,15 @@ public class NestedPantryIngredientAdapter extends RecyclerView.Adapter<NestedPa
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern ( "dd/MM/yy" , Locale.UK );
         String date = formatter.format(p.getExpirationDate());
-        double amnt = p.getIngredient().getGenericIngredient().getMeasuringUnit().getDefaultAmount();
-        holder.setDefaultAmount((float)amnt);
+        float amnt = 0f;
+        if(p.getIngredient().getName() == null){
+            double a =(double) p.getIngredient().getGenericIngredient().getMeasuringUnit().getDefaultAmount();
+            amnt = (float) a;
+        }else{
+            amnt = p.getIngredient().getAmount().floatValue();
+        }
+
+        holder.setDefaultAmount(amnt);
         holder.getDatePicker().setText(date);
         holder.getAmntEt().setText(p.getAmount().toString());
         holder.getInitValues();
