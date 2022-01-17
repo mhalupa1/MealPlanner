@@ -52,7 +52,9 @@ public class MainFragment extends Fragment {
         SharedPreferences pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
 
         if(pref.contains("categories") && pref.contains("genericIngredients")){
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null).commit();
+            boolean confirmed = pref.getBoolean("confirmed", false);
+            pref.edit().remove("confirmed").apply();
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container,PantryFragment.class,null, confirmed ? "afterConfirm" : null).commit();
         }else{
             Gson gson = new Gson();
             APIClient APIClient = new APIClient();

@@ -15,11 +15,13 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,14 +114,6 @@ public class ConfirmIngredientsFragment extends Fragment {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
-
-        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                pref.edit().putBoolean("backConfirm", true).apply();
-                getParentFragmentManager().popBackStack();
-            }
-        });
         saveBtn.setOnClickListener(saveBtnListener);
 
         // ***BARCODE PART***
@@ -184,6 +178,7 @@ public class ConfirmIngredientsFragment extends Fragment {
                 public void onResponse(Call<List<PantryIngredient>> call, Response<List<PantryIngredient>> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(getContext(), "Success!", Toast.LENGTH_LONG).show();
+                        pref.edit().putBoolean("confirmed", true).apply();
                         getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, MainFragment.class, null).commit();
                     }
                 }
@@ -361,4 +356,5 @@ public class ConfirmIngredientsFragment extends Fragment {
         adapter.notifyItemInserted(pantryIngredients.indexOf(pantryIngredient));
         scannedIngredient = null;
     }
+
 }

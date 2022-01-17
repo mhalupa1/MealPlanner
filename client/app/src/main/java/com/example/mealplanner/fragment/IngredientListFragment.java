@@ -197,7 +197,7 @@ public class IngredientListFragment extends Fragment {
                             pref.edit().putString("pantryIngredients", gson.toJson(pantryIngredients)).apply();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("pantry", selectedPantry);
-                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle).addToBackStack(null).commit();
+                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle, "confirm").addToBackStack("ingList").commit();
 
                         }
                     }
@@ -211,7 +211,7 @@ public class IngredientListFragment extends Fragment {
         } else {
             Bundle bundle = new Bundle();
             bundle.putSerializable("pantry", selectedPantry);
-            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle).addToBackStack(null).commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, ConfirmIngredientsFragment.class, bundle, "confirm").addToBackStack("ingList").commit();
         }
 
     }
