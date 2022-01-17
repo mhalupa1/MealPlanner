@@ -1,140 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="375dp"
+    android:fillViewport="true"
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:background="@drawable/popup_style"
-    android:layout_gravity="center">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:text="@string/no_product_found"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:padding="10dp"
-        android:gravity="center"
-        android:id="@+id/noProductFoundTv"
-        ></TextView>
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/no_product_found"
-        android:layout_gravity="center"></ImageView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dark_accent"
-        android:layout_marginVertical="10dp"
-        ></View>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:padding="5dp"
-        android:gravity="center"
-        android:text="@string/enter_product_details"></TextView>
-
-       <EditText
-           android:layout_width="match_parent"
-           android:layout_height="40dp"
-           android:hint="@string/enter_product_name"
-           android:id="@+id/productNameEt"
-           android:layout_margin="10dp"
-           android:background="@drawable/custom_edittext"
-           android:singleLine="true"
-           android:paddingLeft="10dp"
-           ></EditText>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:text="@string/product_type"
-        android:layout_margin="5dp"></TextView>
-    <AutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:completionThreshold="1"
-        android:id="@+id/productAutoCompleteTv"
-        android:hint="@string/product_type_hint"
-        android:background="@drawable/custom_edittext"
-        android:layout_margin="10dp"
-        android:paddingLeft="10dp"
-        android:singleLine="true"
-        ></AutoCompleteTextView>
-
+    android:layout_gravity="center"
+    >
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        >
 
-        <EditText
-            android:layout_width="140dp"
-            android:layout_height="40dp"
-            android:hint="@string/enter_quantity"
-            android:id="@+id/productQuantityEt"
-            android:inputType="numberDecimal"
-            android:background="@drawable/custom_edittext"
-            android:layout_margin="10dp"
-            android:paddingLeft="10dp"
-            ></EditText>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:text="Unit"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/quantityUnitTv"
-            android:layout_margin="10dp"></TextView>
+            android:textSize="24dp"
+            android:text="@string/no_product_found"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:gravity="center"
+            android:id="@+id/noProductFoundTv"
+            ></TextView>
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/no_product_found"
+            android:layout_gravity="center"></ImageView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dark_accent"
+            android:layout_marginVertical="10dp"
+            ></View>
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:layout_marginTop="20dp">
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:padding="5dp"
+            android:gravity="center"
+            android:text="@string/enter_product_details"></TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/enter_product_name"
+            android:id="@+id/productNameEt"
+            android:layout_margin="10dp"
+            android:background="@drawable/custom_edittext"
+            android:singleLine="true"
+            android:paddingLeft="10dp"
+            ></EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="@string/product_type"
+            android:layout_margin="5dp"></TextView>
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:completionThreshold="1"
+            android:id="@+id/productAutoCompleteTv"
+            android:hint="@string/product_type_hint"
+            android:background="@drawable/custom_edittext"
+            android:layout_margin="10dp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:paddingLeft="10dp"
+            ></AutoCompleteTextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:hint="@string/enter_quantity"
+                android:id="@+id/productQuantityEt"
+                android:inputType="numberDecimal"
+                android:background="@drawable/custom_edittext"
+                android:layout_margin="10dp"
+                android:paddingLeft="10dp"
+                ></EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="Unit"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/quantityUnitTv"
+                android:layout_margin="10dp"></TextView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:layout_gravity="center">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:textSize="12dp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"
-                android:id="@+id/cancelProductTv"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center"></TextView>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_weight="0.5"
-            android:layout_gravity="center">
-            <Button
+            android:padding="5dp"
+            android:layout_marginTop="20dp">
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="@string/save_add"
-                android:layout_gravity="center"
-                android:id="@+id/saveProductBtn"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="0.5"
                 android:gravity="center"
-                android:background="@drawable/button_style"></Button>
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:id="@+id/cancelProductTv"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:gravity="center"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="0.5"
+                android:layout_gravity="center">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/save_add"
+                    android:layout_gravity="center"
+                    android:id="@+id/saveProductBtn"
+                    android:gravity="center"
+                    android:background="@drawable/button_style"></Button>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+
+</ScrollView>

@@ -24,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -238,6 +240,7 @@ public class ConfirmIngredientsFragment extends Fragment {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.product_not_found_popup);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         EditText productNameEt = dialog.findViewById(R.id.productNameEt);
         EditText productQuantityEt = dialog.findViewById(R.id.productQuantityEt);
         TextView quantityUnit = dialog.findViewById(R.id.quantityUnitTv);
@@ -255,6 +258,8 @@ public class ConfirmIngredientsFragment extends Fragment {
         actv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(view.getContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
                 scannedIngredient = new Ingredient();
                 scannedIngredient.setGenericIngredient(map.get(ingredientAdapter.getItem(i)));
                 quantityUnit.setText(scannedIngredient.getGenericIngredient().getMeasuringUnit().getName());

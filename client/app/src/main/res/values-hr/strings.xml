@@ -15,7 +15,7 @@
     <string name="no_product_found">Nije pronađen proizvod za skenirani barkod</string>
     <string name="enter_product_details">Molimo unesite podatke o proizvodu kako bismo ga dodali u bazu podataka:</string>
     <string name="enter_product_name">Unesite naziv proizvoda</string>
-    <string name="product_type">Odaberite vrstu proivoda:</string>
+    <string name="product_type">Odaberite vrstu proizvoda:</string>
     <string name="product_type_hint">Generički naziv, npr. mlijeko</string>
     <string name="enter_quantity">Unesite količinu</string>
     <string name="cancel">Poništi</string>

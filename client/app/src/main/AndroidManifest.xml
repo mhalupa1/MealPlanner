@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MealPlanner">
         <activity
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
