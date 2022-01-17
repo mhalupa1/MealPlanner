@@ -352,8 +352,8 @@ public class ConfirmIngredientsFragment extends Fragment {
     }
     private void addToList(Ingredient ingredient){
         PantryIngredient pantryIngredient = new PantryIngredient(null, ingredient.getAmount(), selectedPantry, ingredient);
-        pantryIngredients.add(pantryIngredient);
-        adapter.notifyItemInserted(pantryIngredients.indexOf(pantryIngredient));
+        pantryIngredients.add(0,pantryIngredient);
+        adapter.notifyItemInserted(0);
         scannedIngredient = null;
     }
 
