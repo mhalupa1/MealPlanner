@@ -41,5 +41,10 @@
     <string name="success">Success!</string>
     <string name="product_add_success">Product added successfully!</string>
     <string name="choose_product_type">Choose product type</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="pantries">Pantries</string>
+    <string name="add_ingredients">Add ingredients</string>
+    <string name="add_to_pantry">Add to pantry</string>
 
 </resources>

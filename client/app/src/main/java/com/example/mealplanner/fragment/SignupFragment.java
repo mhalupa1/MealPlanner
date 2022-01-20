@@ -64,11 +64,11 @@ public class SignupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
-
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);
         context = getContext();
+        getActivity().setTitle(context.getResources().getString(R.string.signup));
         LanguageMethods.loadLanguage(context);
         usernameEt = view.findViewById(R.id.usernameSignupEt);
         passwordEt = view.findViewById(R.id.passwordSignupEt);

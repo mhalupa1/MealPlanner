@@ -66,6 +66,7 @@ public class PantryFragment extends Fragment {
                              Bundle savedInstanceState) {
         pantryArrayList.clear();
         LanguageMethods.loadLanguage(getContext());
+        getActivity().setTitle(getContext().getResources().getString(R.string.pantries));
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);

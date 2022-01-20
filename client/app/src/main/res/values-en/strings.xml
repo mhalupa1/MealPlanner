@@ -41,5 +41,10 @@
     <string name="success">Uspješno dodano!</string>
     <string name="product_add_success">Proizvod uspješno spremljen!</string>
     <string name="choose_product_type">Odaberite vrstu proizvoda</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="pantries">Pantries</string>
+    <string name="add_ingredients">Add ingredients</string>
+    <string name="add_to_pantry">Add to pantry</string>
 
 </resources>

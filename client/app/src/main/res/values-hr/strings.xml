@@ -41,4 +41,9 @@
     <string name="success">Success!</string>
     <string name="product_add_success">Product added successfully!</string>
     <string name="choose_product_type">Choose product type</string>
+    <string name="login">Prijava</string>
+    <string name="signup">Registracija</string>
+    <string name="pantries">Smočnice</string>
+    <string name="add_ingredients">Dodaj sastojke</string>
+    <string name="add_to_pantry">Dodaj u smočnicu</string>
 </resources>

@@ -104,6 +104,7 @@ public class IngredientListFragment extends Fragment {
         pref = getContext().getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         LanguageMethods.loadLanguage(getContext());
+        getActivity().setTitle(getContext().getResources().getString(R.string.add_ingredients));
         APIClient APIClient = new APIClient();
         Retrofit retrofit = APIClient.getClient();
         service = retrofit.create(APIService.class);

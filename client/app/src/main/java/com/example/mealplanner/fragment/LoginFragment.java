@@ -62,7 +62,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         context = getContext();
-
+        getActivity().setTitle(context.getResources().getString(R.string.login));
         Long loginTime = context.getSharedPreferences("mealPlanner",Context.MODE_PRIVATE).getLong("loginTime",0);
 
         //60 minute login session

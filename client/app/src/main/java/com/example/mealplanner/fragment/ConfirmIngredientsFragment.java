@@ -90,6 +90,7 @@ public class ConfirmIngredientsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_confirm_ingredients, container, false);
         context = getContext();
         LanguageMethods.loadLanguage(context);
+        getActivity().setTitle(context.getResources().getString(R.string.add_to_pantry));
         pref = context.getSharedPreferences("mealPlanner", Context.MODE_PRIVATE);
         Bundle bundle = getArguments();
         selectedPantry = (Pantry) bundle.getSerializable("pantry");

@@ -61,6 +61,7 @@ public class PantryIngredientsFragment extends Fragment {
         pantryArrayList.clear();
         wrapperArrayList.clear();
         LanguageMethods.loadLanguage(getContext());
+        getActivity().setTitle(pantry.getName());
         View view = inflater.inflate(R.layout.fragment_pantry_ingredients, container, false);
         FloatingActionButton addPantryIngredientBtn = view.findViewById(R.id.addPantryIngredientBtn);
         addPantryIngredientBtn.setOnClickListener(new View.OnClickListener() {
