@@ -1,8 +1,10 @@
 package com.example.mealplanner.adapter;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,7 +19,9 @@ import com.example.mealplanner.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
     private TextView pantryIngTv;
@@ -32,6 +36,7 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
     private boolean dateInitialized = false;
     private String latestDate;
     private float defaultAmount;
+
     public NestedPantryIngredientViewHolder(@NonNull View itemView, NestedPantryIngredientAdapter.OnItemsChangedListener listener) {
         super(itemView);
         pantryIngTv = itemView.findViewById(R.id.pantryIngTv);
@@ -46,7 +51,7 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
                 amntEt.setFocusable(false);
                 float changedAmnt = Float.valueOf(amntEt.getText().toString().trim());
                 float newAmount = changedAmnt - defaultAmount;
-                if(!(newAmount >= 0))
+                if (!(newAmount >= 0))
                     newAmount = 0.0f;
                 amntEt.setText(String.valueOf(newAmount));
                 listener.onAmountChanged(String.valueOf(newAmount), getAdapterPosition());
@@ -82,7 +87,9 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(view.getContext(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+               DatePickerDialog dialog = new DatePickerDialog(view.getContext(), date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+               dialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+               dialog.show();
             }
         });
         datePicker.addTextChangedListener(new TextWatcher() {
@@ -98,12 +105,12 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(!dateInitialized){
+                if (!dateInitialized) {
                     dateInitialized = true;
-                }else{
-                    if(!latestDate.equals(editable.toString())){
+                } else {
+                    if (!latestDate.equals(editable.toString())) {
                         latestDate = editable.toString();
-                        listener.onDateChanged(editable,getAdapterPosition());
+                        listener.onDateChanged(editable, getAdapterPosition());
                     }
 
                 }
@@ -112,10 +119,10 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(listener != null){
+                if (listener != null) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        listener.onLongItemClick(view,position);
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onLongItemClick(view, position);
                         return true;
                     }
                 }
@@ -136,12 +143,12 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void afterTextChanged(Editable editable) {
                 Float amount;
-                try{
+                try {
                     amount = Float.valueOf(editable.toString());
-                    if(initAmnt != amount){
+                    if (initAmnt != amount) {
                         amountChanged = true;
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -150,7 +157,7 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         amntEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus && amountChanged) {
+                if (!hasFocus && amountChanged) {
                     String amount = amntEt.getText().toString().trim();
                     listener.onAmountChanged(amount, getAdapterPosition());
                     amountChanged = false;
@@ -160,15 +167,29 @@ public class NestedPantryIngredientViewHolder extends RecyclerView.ViewHolder {
         });
 
     }
-    public void setDefaultAmount(float defaultAmount){
+
+    public void setDefaultAmount(float defaultAmount) {
         this.defaultAmount = defaultAmount;
     }
-   private void updateLabel() {
+
+    private void updateLabel() {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.UK);
         datePicker.setText(dateFormat.format(calendar.getTime()));
+        Calendar temp = Calendar.getInstance();
+        if(calendar.get(Calendar.DAY_OF_MONTH) == temp.get(Calendar.DAY_OF_MONTH)
+            && calendar.get(Calendar.YEAR) == temp.get(Calendar.YEAR)){
+            datePicker.setTextColor(Color.parseColor("#FFA500"));
+            return;
+        }
+        if (calendar.getTime().before(Calendar.getInstance().getTime())) {
+            datePicker.setTextColor(Color.RED);
+            return;
+        }
+        datePicker.setTextColor(Color.BLACK);
     }
-    public void getInitValues(){
+
+    public void getInitValues() {
         initAmnt = Float.valueOf(amntEt.getText().toString().trim());
         latestDate = datePicker.getText().toString();
     }
